@@ -19,7 +19,15 @@
         <router-outlet></router-outlet>
       </div>
     </main>
-     <!-- Footer -->
+    <!-- Footer -->
     <app-footer [isSidebarCollapsed]="isSidebarCollapsed"></app-footer>
   </div>
 </div>
+
+<!-- Scroll To Top Button -->
+<button 
+  class="btn btn-primary scroll-top-btn" 
+  [ngClass]="{ 'show': showScrollTop }"
+  (click)="scrollTop()">
+  <i class="fas fa-arrow-up"></i>
+</button>

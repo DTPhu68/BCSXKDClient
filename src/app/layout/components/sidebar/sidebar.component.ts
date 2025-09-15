@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
-import { filter } from 'rxjs';
+import { filter, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-sidebar',
@@ -15,44 +15,57 @@ export class SidebarComponent {
   userRoles: string[] = ['Admin', 'User', 'Manager'];
   userName = 'Nguyen Van A';
 
-  constructor(private router: Router) {
-    // Reset expanded menu on route change
-    this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe(() => {
-      if (window.innerWidth <= 768) {
-        this.isCollapsed = true;
-      }
-    });
-  }
+   private routerSub?: Subscription;
+  private resizeHandler = () => this.checkScreenSize();
+  
+  constructor(private router: Router) {  }
 
   ngOnInit() {
     this.loadUserProfile();
     this.checkScreenSize();
 
-    window.addEventListener('resize', () => {
-      this.checkScreenSize();
-    });
+       // Lắng nghe resize
+    window.addEventListener('resize', this.resizeHandler);
+
+    // Reset submenu & collapse sidebar khi route change trên mobile
+    this.routerSub = this.router.events
+      .pipe(filter((event) => event instanceof NavigationEnd))
+      .subscribe(() => {
+        if (window.innerWidth <= 768) {
+          this.isCollapsed = true;
+          this.collapsedChange.emit(true);
+        }
+      });
+  }
+
+  ngOnDestroy(): void {
+    window.removeEventListener('resize', this.resizeHandler);
+    this.routerSub?.unsubscribe();
   }
 
   loadUserProfile() {
-    // Logic to load user profile
+    // TODO: lấy user từ service sau này
   }
 
-  checkScreenSize() {
+  private checkScreenSize() {
     if (window.innerWidth <= 768) {
       this.isCollapsed = true;
       this.collapsedChange.emit(true);
     }
   }
 
-  toggleSidebar() {
+
+toggleSidebar() {
     this.isCollapsed = !this.isCollapsed;
     this.collapsedChange.emit(this.isCollapsed);
+
+    // lưu trạng thái (nếu muốn đồng bộ với LayoutShell)
+    localStorage.setItem('sidebarCollapsed', this.isCollapsed.toString());
   }
 
   toggleSubmenu(menu: string) {
     if (this.isCollapsed) {
-      this.isCollapsed = false;
-      this.collapsedChange.emit(false);
+      this.toggleSidebar();
       this.expandedMenu = menu;
     } else {
       this.expandedMenu = this.expandedMenu === menu ? null : menu;
