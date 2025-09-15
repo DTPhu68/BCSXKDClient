@@ -1,0 +1,25 @@
+<!-- Main application layout -->
+<div class="app-wrapper" *ngIf="isLoggedIn" [ngClass]="{ 'sidebar-collapsed': isSidebarCollapsed }">
+  <!-- Sidebar -->
+  <app-sidebar
+    [isCollapsed]="isSidebarCollapsed"
+    (collapsedChange)="onSidebarToggled()"></app-sidebar>
+
+  <!-- Main Content -->
+  <div class="main-wrapper">
+    <!-- Header -->
+    <app-header
+      [isSidebarCollapsed]="isSidebarCollapsed"
+      (toggleSidebarEvent)="onSidebarCollapsedChange($event)"></app-header>
+
+    <!-- Page Content -->
+    <main class="content-wrapper">
+      <!-- Main Content Area -->
+      <div class="content-container">
+        <router-outlet></router-outlet>
+      </div>
+    </main>
+     <!-- Footer -->
+    <app-footer [isSidebarCollapsed]="isSidebarCollapsed"></app-footer>
+  </div>
+</div>

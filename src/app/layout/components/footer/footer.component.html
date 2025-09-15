@@ -1,0 +1,29 @@
+<!-- footer.component.html -->
+<footer class="main-footer" [ngClass]="{ 'sidebar-collapsed': isSidebarCollapsed }">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="copyright">
+          © {{ currentYear }}
+          <strong>Báo cáo Kế hoạch sản xuất kinh doanh</strong>
+          .
+          <span class="d-none d-sm-inline">All rights reserved.</span>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="footer-links">
+          <nav>
+            <ul class="list-inline text-md-end mb-0">
+              <li class="list-inline-item">
+                <span class="version-info">
+                  <i class="fas fa-code-branch"></i>
+                  Version {{ version }}
+                </span>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>

@@ -1,0 +1,70 @@
+<!-- header.component.html -->
+<header class="main-header" [ngClass]="{ 'sidebar-collapsed': isSidebarCollapsed }">
+  <nav class="navbar navbar-expand-lg">
+    <div class="container-fluid">
+      <!-- Toggle Button -->
+      <button class="btn btn-link sidebar-toggle" (click)="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+      </button>
+
+      <!-- Search Form -->
+      <form class="d-none d-lg-flex search-form">
+        <div class="input-group">
+          <input type="text" class="form-control" placeholder="Tìm kiếm..." />
+          <button class="btn btn-outline-secondary" type="submit">
+            <i class="fas fa-search"></i>
+          </button>
+        </div>
+      </form>
+
+      <!-- Right Menu -->
+      <ul class="navbar-nav ms-auto">
+        <!-- Notifications -->
+
+        <!-- User Menu -->
+        <li class="nav-item dropdown" dropdown>
+          <!-- <a class="nav-link dropdown-toggle" dropdownToggle>
+           <i class="fas fa-user-circle user-icon"></i>
+            <span class="d-none d-lg-inline">{{ fullUserName }}</span>
+          </a> -->
+          <button class="nav-link dropdown-toggle btn btn-link" dropdownToggle>
+            <i class="fas fa-user-circle user-icon"></i>
+            <span class="d-none d-lg-inline">{{ fullUserName }}</span>
+          </button>
+          <ul *dropdownMenu class="dropdown-menu dropdown-menu-end show">
+            <li class="dropdown-header text-center">
+              <i class="fas fa-user-circle fa-2x text-secondary"></i>
+              <p>
+                {{ fullUserName }}
+                <small class="text-muted" *ngFor="let role of roles">
+                  {{ role }}
+                  <br />
+                </small>
+              </p>
+            </li>
+            <li><hr class="dropdown-divider" /></li>
+            <li>
+              <a routerLink="/profile" class="dropdown-item">
+                <i class="fas fa-user me-2"></i>
+                Hồ sơ cá nhân
+              </a>
+            </li>
+            <li>
+              <a routerLink="/settings" class="dropdown-item">
+                <i class="fas fa-cog me-2"></i>
+                Cài đặt
+              </a>
+            </li>
+            <li><hr class="dropdown-divider" /></li>
+            <li>
+              <a href="#" class="dropdown-item" (click)="logout($event)">
+                <i class="fas fa-sign-out-alt me-2"></i>
+                Đăng xuất
+              </a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </nav>
+</header>

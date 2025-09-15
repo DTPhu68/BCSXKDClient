@@ -1,0 +1,242 @@
+/* header.component.scss */
+.main-header {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 260px;
+  height: 70px;
+  background: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 1050;
+  transition: all 0.3s ease;
+
+  &.sidebar-collapsed {
+    left: 70px;
+  }
+
+  .navbar {
+    height: 100%;
+    padding: 0 1rem;
+
+    .sidebar-toggle {
+      padding: 0.5rem;
+      color: #6c757d;
+
+      &:hover {
+        color: #000;
+      }
+    }
+
+    .search-form {
+      max-width: 400px;
+      margin: 0 2rem;
+
+      .input-group {
+        background: #f8f9fa;
+        border-radius: 20px;
+        overflow: hidden;
+
+        .form-control {
+          border: none;
+          background: transparent;
+
+          &:focus {
+            box-shadow: none;
+          }
+        }
+
+        .btn {
+          border: none;
+          background: transparent;
+          color: #6c757d;
+
+          &:hover {
+            color: #000;
+          }
+        }
+      }
+    }
+
+    .nav-item {
+      position: relative;
+
+      .nav-link {
+        padding: 0.5rem 1rem;
+        color: #6c757d;
+
+        &:hover {
+          color: #000;
+        }
+
+        &.has-notifications {
+          color: #ffc107;
+        }
+
+        .badge {
+          position: absolute;
+          top: 0;
+          right: 0;
+          padding: 0.25rem 0.4rem;
+          font-size: 0.75rem;
+        }
+      }
+
+      // Notifications Dropdown
+      .notifications-dropdown {
+        width: 320px;
+        padding: 0;
+
+        .dropdown-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 1rem;
+          border-bottom: 1px solid #dee2e6;
+
+          h6 {
+            color: #000;
+          }
+        }
+
+        .notifications-list {
+          max-height: 300px;
+          overflow-y: auto;
+
+          .notification-item {
+            display: flex;
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #f8f9fa;
+
+            &:hover {
+              background: #f8f9fa;
+            }
+
+            &.unread {
+              background: #e8f4fe;
+            }
+
+            .notification-icon {
+              width: 40px;
+              height: 40px;
+              margin-right: 1rem;
+              background: #f8f9fa;
+              border-radius: 50%;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+
+              i {
+                color: #3498db;
+                font-size: 1.2rem;
+              }
+            }
+
+            .notification-content {
+              flex: 1;
+
+              p {
+                margin: 0;
+                color: #000;
+                font-size: 0.9rem;
+              }
+
+              small {
+                font-size: 0.8rem;
+              }
+            }
+          }
+        }
+
+        .dropdown-footer {
+          padding: 0.75rem 1rem;
+          text-align: center;
+          border-top: 1px solid #dee2e6;
+
+          a {
+            color: #3498db;
+            text-decoration: none;
+
+            &:hover {
+              text-decoration: underline;
+            }
+          }
+        }
+      }
+
+      // User Menu
+      &.user-menu {
+        .nav-link {
+          display: flex;
+          align-items: center;
+          padding: 0.5rem 1rem;
+
+          .user-icon {
+            font-size: 1.8rem; // thay vì width/height của ảnh
+            margin-right: 0.5rem;
+            color: #6c757d;
+            cursor: pointer;
+          }
+        }
+
+        .dropdown-menu {
+          z-index: 2000; // cao hơn 999
+          position: absolute; // đảm bảo thoát khỏi stacking context
+          width: 250px;
+          padding: 0;
+
+          .dropdown-header {
+            text-align: center;
+            padding: 1rem;
+            background: #f8f9fa;
+
+            .profile-user-img {
+              width: 90px;
+              height: 90px;
+              border-radius: 50%;
+              margin-bottom: 0.5rem;
+              border: 3px solid #fff;
+              box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            }
+
+            p {
+              margin: 0;
+              color: #000;
+
+              small {
+                display: block;
+                color: #6c757d;
+                margin-top: 0.25rem;
+              }
+            }
+          }
+
+          .dropdown-item {
+            padding: 0.75rem 1rem;
+            color: #212529; // chữ đen đậm chuẩn Bootstrap
+            i {
+              width: 20px;
+              margin-right: 0.5rem;
+              text-align: center;
+            }
+
+            &:hover {
+              background: #2c3e50;
+              color: #fff; // khi hover thì trắng trên nền đậm
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .main-header {
+    left: 0;
+
+    &.sidebar-collapsed {
+      left: 0;
+    }
+  }
+}
