@@ -25,14 +25,14 @@
         <li class="nav-item dropdown" dropdown>
           <button class="nav-link dropdown-toggle btn btn-link" dropdownToggle>
             <i class="fas fa-user-circle user-icon"></i>
-            <span class="d-none d-lg-inline">{{ fullUserName }}</span>
+            <span class="d-none d-lg-inline">{{ currentUser?.fullName }}</span>
           </button>
           <ul *dropdownMenu class="dropdown-menu dropdown-menu-end">
             <li class="dropdown-header text-center">
               <i class="fas fa-user-circle fa-2x text-secondary"></i>
               <p>
-                {{ fullUserName }}
-                <small class="text-muted" *ngFor="let role of roles">
+                {{ currentUser?.fullName }}<br />
+                <small class="text-muted" *ngFor="let role of currentUser?.roles; let i = index">
                   {{ role }}
                   <br />
                 </small>

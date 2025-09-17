@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { filter, Subscription } from 'rxjs';
+import { AuthService } from 'src/app/core/services/auth.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -12,13 +13,13 @@ export class SidebarComponent {
   @Input() isCollapsed = false;
 
   expandedMenu: string | null = null;
-  userRoles: string[] = ['Admin', 'User', 'Manager'];
-  userName = 'Nguyen Van A';
+  userRoles: string[] = [];
+  userName = '';
 
    private routerSub?: Subscription;
   private resizeHandler = () => this.checkScreenSize();
   
-  constructor(private router: Router) {  }
+  constructor(private router: Router, public authService: AuthService) {  }
 
   ngOnInit() {
     this.loadUserProfile();
@@ -44,7 +45,12 @@ export class SidebarComponent {
   }
 
   loadUserProfile() {
-    // TODO: lấy user từ service sau này
+     const user = this.authService.getCurrentUser();
+    if (user) {
+      this.userName = user?.userName;
+      this.userRoles =Array.from(new Set(user.roles));
+      // this.userAvatar = user.avatar || this.userAvatar;
+    }
   }
 
   private checkScreenSize() {
