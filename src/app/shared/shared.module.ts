@@ -9,12 +9,14 @@ import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { NotFoundComponent } from './pages/not-found.component';
 import { ServerErrorComponent } from './pages/server-error.component';
 import { UnauthorizedComponent } from './pages/unauthorized.component';
+import { ViDecimalValueAccessor } from './directives/vi-decimal.value-accessor';
 
 @NgModule({
   declarations: [
     NotFoundComponent,
     ServerErrorComponent,
-    UnauthorizedComponent
+    UnauthorizedComponent,
+     ViDecimalValueAccessor,
   ],
   imports: [
     CommonModule,
@@ -37,7 +39,8 @@ import { UnauthorizedComponent } from './pages/unauthorized.component';
     PaginationModule,
     NotFoundComponent,
     ServerErrorComponent,
-    UnauthorizedComponent
+    UnauthorizedComponent,
+     ViDecimalValueAccessor,
   ],
 })
 export class SharedModule {}

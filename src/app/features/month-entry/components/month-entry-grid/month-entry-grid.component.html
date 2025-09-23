@@ -1,0 +1,66 @@
+<div class="small text-muted mb-2">
+  <strong>Phím tắt:</strong>
+  ↑ ↓ ← → để di chuyển • Enter/Shift+Enter để xuống/lên • Tab/Shift+Tab để qua phải/trái •
+  Ctrl+Arrow để nhảy đầu/cuối • Ctrl+S để lưu
+</div>
+<table class="table table-bordered table-sm">
+  <thead class="table-light">
+    <tr>
+      <th style="width: 5%">#</th>
+      <th style="width: 40%">Chỉ tiêu</th>
+      <th style="width: 18%">Kế hoạch tháng</th>
+      <th style="width: 18%">Thực hiện tháng</th>
+      <th style="width: 19%">Kế hoạch năm</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let d of details; index as i" [ngClass]="getRowClass(d.level)">
+      <td>{{ i + 1 }}</td>
+      <td>
+        <!-- <span *ngIf="d.prefix">{{ d.prefix }}.</span>
+        {{ d.chiTieuName }} -->
+        <span [style.paddingLeft]="getIndent(d.level)">
+          <span *ngIf="d.prefix">{{ d.prefix }}.</span>
+          {{ d.chiTieuName }}
+        </span>
+      </td>
+      <!-- Plan -->
+      <td>
+        <input
+          #cellInput
+          type="text"
+          appViDecimal
+          [appViDecimalMin]="0"
+          class="form-control text-end"
+          [readonly]="!editable || !d.leafNode"
+          [ngClass]="getInputClass(editable, d.leafNode)"
+          [(ngModel)]="d.planValue"
+          (focus)="onFocus($event)"
+          (keydown)="onKeyDown($event, i, 0)"
+          (ngModelChange)="onCellChange(d, 'planValue', $event)"
+          [class.active-cell]="cellInput === activeElement" />
+      </td>
+
+      <!-- Actual -->
+      <td>
+        <input
+          #cellInput
+          type="text"
+          appViDecimal
+          [appViDecimalMin]="0"
+          class="form-control text-end"
+          [readonly]="!editable || !d.leafNode"
+          [ngClass]="getInputClass(editable, d.leafNode)"
+          [(ngModel)]="d.actualValue"
+          (focus)="onFocus($event)"
+          (keydown)="onKeyDown($event, i, 1)"
+          (ngModelChange)="onCellChange(d, 'actualValue', $event)"
+          [class.active-cell]="cellInput === activeElement" />
+      </td>
+      <!-- YearPlan (chỉ xem) -->
+      <td class="text-end text-muted">
+        {{ d.yearPlanValue | number : '1.0-2' : 'vi-VN' }}
+      </td>
+    </tr>
+  </tbody>
+</table>

@@ -4,5 +4,7 @@ export interface AuthUser {
   userName: string;
   fullName: string;
   khoiId: number;  
+  donViId: number;
+  donViName: string;
   roles: string[];
 }

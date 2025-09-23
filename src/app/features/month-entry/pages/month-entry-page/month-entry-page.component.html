@@ -1,0 +1,67 @@
+<!-- month-entry-page.component.html -->
+<div class="month-entry-page d-flex flex-column h-100">
+  <!-- Header -->
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <div class="d-flex align-items-center gap-2">
+      <label class="form-label m-0">Kỳ báo cáo:</label>
+
+      <select class="form-select w-auto" [ngModel]="month" (ngModelChange)="onMonthChange($event)">
+        <option *ngFor="let m of months" [value]="m">
+          {{ m < 10 ? '0' + m : m }}
+        </option>
+      </select>
+
+      <select class="form-select w-auto" [ngModel]="year" (ngModelChange)="onYearChange($event)">
+        <option *ngFor="let y of years" [value]="y">{{ y }}</option>
+      </select>
+
+      <span
+        *ngIf="facade.loading$ | async"
+        class="ms-2 text-primary d-flex align-items-center gap-2">
+        <span class="spinner-border spinner-border-sm"></span>
+        <span>Đang nạp tháng {{ month }} năm {{ year }}...</span>
+      </span>
+    </div>
+
+    <div class="text-end">
+      <div class="fw-bold">
+        Đơn vị: {{ (facade.companyName$ | async) || '' }} tháng {{ month }} năm {{ year }}
+      </div>
+      <!-- ✅ Trạng thái -->
+      <div *ngIf="facade.status$ | async as status" class="badge bg-primary mt-1">
+        {{ status }}
+      </div>
+      <!-- ✅ Dirty state -->
+      <div *ngIf="facade.dirty$ | async; else clean" class="small text-danger fst-italic mt-1">
+        Có thay đổi, hãy lưu trước khi thoát
+      </div>
+      <ng-template #clean>
+        <div class="small text-muted fst-italic mt-1">Chưa có thay đổi</div>
+      </ng-template>
+    </div>
+  </div>
+
+  <!-- Grid nhập liệu -->
+  <div class="flex-grow-1 overflow-auto">
+    <app-month-entry-grid
+      *ngIf="!(facade.loading$ | async)"
+      [@fadeInOut]
+      [details]="facade.details$ | async"
+      [addToRelations]="facade.addToRelations$ | async"
+      [editable]="facade.isEditable$ | async"
+      (detailChange)="onDetailChange($event)"
+      (save)="onSave()"></app-month-entry-grid>
+    <div *ngIf="facade.loading$ | async" class="text-center text-muted p-4" [@fadeInOut]>
+      <div class="spinner-border text-primary"></div>
+      <div class="mt-2">Đang nạp tháng {{ month }} năm {{ year }}...</div>
+    </div>
+  </div>
+
+  <!-- Footer / Actions -->
+  <app-month-entry-actions
+    [canSave]="facade.isEditable$ | async"
+    [dirty]="facade.dirty$ | async"
+    (save)="onSave()"></app-month-entry-actions>
+</div>
+
+<pre>{{ facade.isEditable$ | async }}</pre>

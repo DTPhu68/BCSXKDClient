@@ -94,4 +94,7 @@ export class AuthService {
   getKhoiId(): number | null {
     return this.currentUserSubject.value ? this.currentUserSubject.value.khoiId : null;
   }
+   getDonViId(): number | null {
+    return this.currentUserSubject.value ? this.currentUserSubject.value.donViId : null;
+  }
 }

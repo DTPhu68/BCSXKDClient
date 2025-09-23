@@ -1,17 +1,20 @@
-import { NgModule, Optional, SkipSelf } from '@angular/core';
+import { LOCALE_ID, NgModule, Optional, SkipSelf } from '@angular/core';
 import { ToastrModule } from 'ngx-toastr';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { ErrorInterceptor } from './interceptors/error.interceptor';
 import { LoadingInterceptor } from './interceptors/loading.interceptor';
 import { TokenInterceptor } from './interceptors/token.interceptor';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
-import { SharedModule } from '../shared/shared.module';
+import localeVi from '@angular/common/locales/vi';
+import { registerLocaleData } from '@angular/common';
+registerLocaleData(localeVi);
 
 @NgModule({
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true },
+    { provide: LOCALE_ID, useValue: 'vi-VN' },
   ],
   declarations: [],
   imports: [

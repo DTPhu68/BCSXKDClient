@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LayoutShellComponent } from './pages/layout-shell/layout-shell.component';
 import { AuthGuard } from '../core/guards/auth.guard';
+import { DashboardComponent } from './pages/dashboard/dashboard.component';
 
 const routes: Routes = [
   {
@@ -10,7 +11,12 @@ const routes: Routes = [
     canLoad: [AuthGuard],
     canActivate: [AuthGuard],
     canActivateChild: [AuthGuard],
+    children:[
+      {path:'',component:DashboardComponent},
+      { path: 'month-entries', loadChildren: () => import('../features/month-entry/month-entry.module').then(m => m.MonthEntryModule) },  
+    ]
   },
+  
 ];
 
 @NgModule({

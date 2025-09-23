@@ -1,0 +1,12 @@
+<div class="d-flex justify-content-between align-items-center border-top p-2">
+  <div>
+    <span *ngIf="!dirty" class="text-muted small">Chưa có thay đổi</span>
+    <span *ngIf="dirty" class="text-danger small">Có thay đổi, hãy lưu trước khi thoát</span>
+  </div>
+
+  <button class="btn btn-primary"
+          [disabled]="!canSave || !dirty"
+          (click)="save.emit()">
+    <i class="fas fa-save"></i> Lưu
+  </button>
+</div>

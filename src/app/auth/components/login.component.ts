@@ -26,8 +26,8 @@ export class LoginComponent {
     }
 
     this.loginForm = this.fb.group({
-      userName: ['tctds', Validators.required],
-      password: ['tctds', Validators.required],
+      userName: ['xndmvi', Validators.required],
+      password: ['xndmvi', Validators.required],
       remember: [false],
     });
   }
