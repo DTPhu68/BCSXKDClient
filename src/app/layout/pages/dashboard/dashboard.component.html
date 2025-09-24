@@ -1,1 +1,22 @@
-<p>dashboard works!</p>
+<div class="container mt-4" *ngIf="khoiMenu">
+  <div class="card shadow-sm border-0">
+    <div class="card-body">
+      <h4 class="card-title">
+        <i [class]="khoiMenu.icon"></i> {{ khoiMenu.label }}
+      </h4>
+
+      <p class="card-text text-muted">
+        Xin chào! Bạn đang làm việc tại <strong>{{ khoiMenu.label }}</strong>.
+        Hãy chọn chức năng bên dưới để bắt đầu.
+      </p>
+
+      <div class="d-flex flex-wrap gap-2">
+        <ng-container *ngFor="let child of khoiMenu.children">
+          <a [routerLink]="[child.routerLink, khoiMenu.khoiId]" class="btn btn-outline-primary">
+            <i [class]="child.icon"></i> {{ child.label }}
+          </a>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</div>

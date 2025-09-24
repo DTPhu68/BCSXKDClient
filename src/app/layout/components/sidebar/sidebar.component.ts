@@ -2,6 +2,8 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { filter, Subscription } from 'rxjs';
 import { AuthService } from 'src/app/core/services/auth.service';
+import { SidebarMenuItem } from '../../models/sidebar-menu-item.model';
+import { SIDEBAR_MENU } from '../../models/sidebar.menudata';
 
 @Component({
   selector: 'app-sidebar',
@@ -12,6 +14,8 @@ export class SidebarComponent {
   @Output() collapsedChange = new EventEmitter<boolean>();
   @Input() isCollapsed = false;
 
+   menuItems: SidebarMenuItem[] = SIDEBAR_MENU;
+   
   expandedMenu: string | null = null;
   userRoles: string[] = [];
   userName = '';

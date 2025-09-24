@@ -25,7 +25,7 @@
 
     <div class="text-end">
       <div class="fw-bold">
-        Đơn vị: {{ (facade.companyName$ | async) || '' }} tháng {{ month }} năm {{ year }}
+        Đơn vị: {{ (facade.companyName$ | async) || '' }} tháng {{ month }} năm {{ year }} khoiId {{ khoiId }}
       </div>
       <!-- ✅ Trạng thái -->
       <div *ngIf="facade.status$ | async as status" class="badge bg-primary mt-1">

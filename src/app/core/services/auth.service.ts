@@ -5,6 +5,8 @@ import { AuthUser, LoginRequest, LoginResponse } from 'src/app/shared/models';
 import { environment } from 'src/environments/environment';
 import { ApiHttpService } from './api-http.service';
 import { Router } from '@angular/router';
+import { SIDEBAR_MENU } from 'src/app/layout/models/sidebar.menudata';
+import { SidebarMenuItem } from 'src/app/layout/models/sidebar-menu-item.model';
 
 @Injectable({
   providedIn: 'root',
@@ -27,9 +29,9 @@ export class AuthService {
     const user = storage.getItem(this.USER_KEY);
 
     if (token && user) {
-      this.currentUserSubject.next(JSON.parse(user));      
+      this.currentUserSubject.next(JSON.parse(user));
     } else {
-      this.currentUserSubject.next(null);      
+      this.currentUserSubject.next(null);
     }
   }
 
@@ -94,7 +96,27 @@ export class AuthService {
   getKhoiId(): number | null {
     return this.currentUserSubject.value ? this.currentUserSubject.value.khoiId : null;
   }
-   getDonViId(): number | null {
+  getDonViId(): number | null {
     return this.currentUserSubject.value ? this.currentUserSubject.value.donViId : null;
+  }
+
+  // tìm object trong SIDEBAR_MENU theo khoiId
+  getKhoiMenu(): SidebarMenuItem | undefined {
+    const khoiId = this.getKhoiId();
+    if (!khoiId) return undefined;
+    return SIDEBAR_MENU.find((x) => x.khoiId === khoiId);
+  }
+
+  getKhoiName(): string | undefined {
+    const khoiId = this.getKhoiId();
+    if (!khoiId) return undefined;
+    return SIDEBAR_MENU.find((x) => x.khoiId === khoiId)?.label;
+  }
+
+  // nếu cần icon luôn thì gom ở đây luôn
+  getKhoiIcon(): string | undefined {
+    const khoiId = this.getKhoiId();
+    if (!khoiId) return undefined;
+    return SIDEBAR_MENU.find((x) => x.khoiId === khoiId)?.icon;
   }
 }

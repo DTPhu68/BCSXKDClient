@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { MonthEntryFacade } from '../../services/month-entry.facade';
 import { MonthDetail } from 'src/app/shared/models/month-entry/month-detail.model';
 import { animate, style, transition, trigger } from '@angular/animations';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-month-entry-page',
@@ -24,11 +25,18 @@ export class MonthEntryPageComponent {
   month = new Date().getMonth() + 1;
   year = new Date().getFullYear();
   loading = false;
+  khoiId: number = 0;
 
-  constructor(public facade: MonthEntryFacade) {}
+  constructor(public facade: MonthEntryFacade, private route: ActivatedRoute) {}
 
   ngOnInit(): void {
-    this.loadData();
+    this.route.paramMap.subscribe((params) => {
+      const khoiIdParam = params.get('khoiId');
+      this.khoiId = khoiIdParam ? +khoiIdParam : 0;
+      //this.facade.setKhoiId(this.khoiId);
+      this.loadData();
+    });
+    //this.loadData();
   }
 
   loadData() {

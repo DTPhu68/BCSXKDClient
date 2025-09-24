@@ -11,12 +11,15 @@ const routes: Routes = [
     canLoad: [AuthGuard],
     canActivate: [AuthGuard],
     canActivateChild: [AuthGuard],
-    children:[
-      {path:'',component:DashboardComponent},
-      { path: 'month-entries', loadChildren: () => import('../features/month-entry/month-entry.module').then(m => m.MonthEntryModule) },  
-    ]
+    children: [
+      { path: '', component: DashboardComponent },
+      {
+        path: 'month-entries/:khoiId',
+        loadChildren: () =>
+          import('../features/month-entry/month-entry.module').then((m) => m.MonthEntryModule),
+      },
+    ],
   },
-  
 ];
 
 @NgModule({
