@@ -1,4 +1,4 @@
-import { ChiTieuKhoiAddTo } from "./chi-tieu-khoi-add-to.model";
+import { ChiTieuKhoiAddTo } from "../chi-tieu-khoi-add-to.model";
 import { MonthDetail } from "./month-detail.model";
 
 export interface MonthResponse {

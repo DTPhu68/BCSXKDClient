@@ -7,6 +7,7 @@ export interface SidebarMenuItem {
     label: string;
     icon: string;
     routerLink: string;
+    roles: string[]; // các role được phép truy cập
     exact?: boolean;    // tuỳ chọn: routerLinkActiveOptions.exact
   }[];
 }

@@ -25,22 +25,25 @@
   <ul class="sidebar-nav">
     <ng-container *ngFor="let item of menuItems">
       <li class="nav-item" *ngIf="!item.children || item.children.length === 1">
-        <!-- item chỉ có 1 link (vd Dashboard) -->
+        <!-- item có 1 child (Dashboard) -->
         <a
           [routerLink]="item.children[0]?.routerLink"
+          [class.disabled]="!hasAccess(item) || !hasAccess(item.children[0])"
           routerLinkActive="active"
           [routerLinkActiveOptions]="{ exact: item.children[0]?.exact || false }"
-          class="nav-link">
+          class="nav-link"
+          (click)="(!hasAccess(item) || !hasAccess(item.children[0])) && $event.preventDefault()">
           <i [class]="item.icon"></i>
           <span *ngIf="!isCollapsed">{{ item.label }}</span>
         </a>
       </li>
-
+      <!-- item có nhiều child (submenu) -->
       <li class="nav-item" *ngIf="item.children && item.children.length > 1">
         <!-- item có submenu -->
         <a
-          (click)="toggleSubmenu(item.key)"
+          (click)="hasAccess(item) && toggleSubmenu(item.key)"
           class="nav-link"
+          [class.disabled]="!hasAccess(item)"
           [ngClass]="{ expanded: expandedMenu === item.key }">
           <i [class]="item.icon"></i>
           <span *ngIf="!isCollapsed">{{ item.label }}</span>
@@ -52,9 +55,11 @@
         <ul class="submenu" [ngClass]="{ show: expandedMenu === item.key }">
           <li *ngFor="let child of item.children">
             <a
-              [routerLink]="[child.routerLink, item.khoiId || null]"
+              [routerLink]="item.khoiId && item.khoiId > 0 ? [child.routerLink, item.khoiId] : [child.routerLink]"
+              [class.disabled]="!hasAccess(item) || !hasAccess(child)"
               routerLinkActive="active"
-              [routerLinkActiveOptions]="{ exact: child.exact || false }">
+              [routerLinkActiveOptions]="{ exact: child.exact || false }"
+              (click)="(!hasAccess(item) || !hasAccess(child)) && $event.preventDefault()">
               <i [class]="child.icon"></i>
               <span *ngIf="!isCollapsed">{{ child.label }}</span>
             </a>

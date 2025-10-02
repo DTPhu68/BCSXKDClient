@@ -29,8 +29,17 @@ export class MockLoginComponent {
     };
     this.authService.login(request).subscribe({
       next: () => {
+        const currentUser = this.authService.getCurrentUser();
         //console.log('AuthUser:', this.authService.getCurrentUser());
-        this.router.navigate(['/']);
+        if(currentUser.roles.includes('Admin')) {
+          this.router.navigate(['/admin']);
+        } else if(currentUser.roles.includes('NhapLieu')) {
+          this.router.navigate(['/month-entries',currentUser.khoiId]);
+        } else if(currentUser.roles.includes('BaoCao')) {
+          this.router.navigate(['/reports',currentUser.khoiId]);
+        } else {
+          this.router.navigate(['/unauthorized']);
+        }        
       },
       error: () => {
         this.loading = false;

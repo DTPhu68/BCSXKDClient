@@ -4,57 +4,53 @@ import {
   EventEmitter,
   HostListener,
   Input,
+  OnInit,
   Output,
   QueryList,
   ViewChildren,
 } from '@angular/core';
 import { ChiTieuKhoiAddTo } from 'src/app/shared/models/chi-tieu-khoi-add-to.model';
-import { MonthDetail } from 'src/app/shared/models/month-entry/month-detail.model';
+import { YearDetail } from 'src/app/shared/models/year-entry';
 
 @Component({
-  selector: 'app-month-entry-grid',
-  templateUrl: './month-entry-grid.component.html',
-  styleUrls: ['./month-entry-grid.component.scss'],
+  selector: 'app-year-entry-grid',
+  templateUrl: './year-entry-grid.component.html',
+  styleUrls: ['./year-entry-grid.component.scss'],
 })
-export class MonthEntryGridComponent {
-  @Input() details: MonthDetail[] = [];
+export class YearEntryGridComponent implements OnInit {
+  @Input() details: YearDetail[] = [];
   @Input() addToRelations: ChiTieuKhoiAddTo[] = [];
   @Input() editable = false;
 
-  @Output() detailChange = new EventEmitter<MonthDetail[]>();
+  @Output() detailChange = new EventEmitter<YearDetail[]>();
   @Output() save = new EventEmitter<void>(); // 👈 thêm event Save
 
-  @ViewChildren('cellInput') cellInputs!: QueryList<ElementRef<HTMLInputElement>>;
+  // LƯU Ý: thêm { read: ElementRef } để ViewChildren trả về ElementRef
+  @ViewChildren('cellInput', { read: ElementRef })
+  cellInputs!: QueryList<ElementRef<HTMLInputElement>>;
 
   activeElement?: ElementRef<HTMLInputElement>;
 
-   ngOnInit(): void {
-    //console.log('YearEntryGridComponent initialized with details:', this.details);
-    console.log('Editable:', this.editable);
+  ngOnInit(): void {
+    // console.log('addToRelations:', this.addToRelations);
+    // console.log('details:', this.details);
   }
-  /** Khi thay đổi giá trị một ô */
-  onCellChange(
-    detail: MonthDetail,
-    field: keyof Pick<MonthDetail, 'planValue' | 'actualValue'>,
-    value: number
-  ) {
-    detail[field] = value || 0;
 
+  //#region Khi thay đổi giá trị một ô
+  onCellChange(detail: YearDetail, field: keyof Pick<YearDetail, 'planValue'>, value: number) {
+    const newValue = Number(value ?? 0);
+
+    // luôn cập nhật model (để hiển thị đúng số)
+    detail[field] = newValue;
+
+    // cập nhật cộng dồn ngay lập tức để bảng hiển thị chuẩn
     if (detail.leafNode) {
       this.updateAddToValues(detail, field);
     }
-
-    // Emit full list để facade cập nhật
-    this.detailChange.emit(this.details);
   }
 
-  private updateAddToValues(
-    changedLeaf: MonthDetail,
-    field: keyof Pick<MonthDetail, 'planValue' | 'actualValue'>
-  ) {
+  private updateAddToValues(changedLeaf: YearDetail, field: keyof Pick<YearDetail, 'planValue'>) {
     const fromId = changedLeaf.chiTieuId;
-
-    // Lấy các chỉ tiêu cần cộng dồn vào (toId)
     const targets = this.addToRelations.filter((r) => r.fromId === fromId).map((r) => r.toId);
 
     for (const toId of targets) {
@@ -66,32 +62,45 @@ export class MonthEntryGridComponent {
       if (target) target[field] = sum;
     }
   }
+  //#endregion
 
-  onFocus(event: FocusEvent) {
-    // const input = event.target as HTMLInputElement;
-    // setTimeout(() => input.select(), 0);
+  private beforeEditValue: number | null = null;
+  onFocus(event: FocusEvent, isLeaf: boolean, detail?: YearDetail, field?: 'planValue') {
     const input = event.target as HTMLInputElement;
-    this.activeElement = this.cellInputs.find((ref) => ref.nativeElement === input);
-    setTimeout(() => input.select(), 0);
+
+    // Nếu là non-leaf (readonly) và focus đến từ chuột -> blur lại ngay
+    if (!isLeaf && (event as any).detail > 0) {
+      input.blur();
+      return;
+    }
+
+    // Nếu là leaf thì nhớ lại giá trị cũ + auto select
+    if (isLeaf && detail && field) {
+      this.beforeEditValue = detail[field] ?? 0;
+      setTimeout(() => input.select(), 0);
+    }
   }
 
-  /** Điều hướng phím mũi tên */
+  onBlur(event: FocusEvent, detail: YearDetail, field: 'planValue') {
+    const newValue = detail[field] ?? 0;
+    if (this.beforeEditValue !== null && this.beforeEditValue !== newValue) {
+      if (detail.leafNode) {
+        this.updateAddToValues(detail, field);
+      }
+      this.detailChange.emit(this.details);
+    }
+    this.beforeEditValue = null;
+  }
+  //#region  Điều hướng phím mũi tên
   onKeyDown(event: KeyboardEvent, rowIndex: number, colIndex: number) {
     const inputs = this.cellInputs.toArray();
-    const cols = 2; // chỉ có plan + actual
+    const cols = 1; // chỉ có planValue
     const idx = rowIndex * cols + colIndex;
     let targetIdx = idx;
     let handled = true;
 
-    // Ctrl + Arrow (nhảy nhanh)
     if (event.ctrlKey) {
       switch (event.key) {
-        case 'ArrowRight':
-          targetIdx = rowIndex * cols + (cols - 1); // cuối hàng
-          break;
-        case 'ArrowLeft':
-          targetIdx = rowIndex * cols; // đầu hàng
-          break;
         case 'ArrowDown':
           targetIdx = this.findLastInColumn(colIndex, cols, inputs) ?? idx;
           break;
@@ -102,25 +111,18 @@ export class MonthEntryGridComponent {
           handled = false;
       }
     } else {
-      // Bình thường
       switch (event.key) {
-        case 'ArrowRight':
-          targetIdx = idx + 1;
-          break;
-        case 'ArrowLeft':
-          targetIdx = idx - 1;
-          break;
         case 'ArrowDown':
           targetIdx = idx + cols;
           break;
         case 'ArrowUp':
           targetIdx = idx - cols;
           break;
-        case 'Tab':
-          targetIdx = event.shiftKey ? idx - 1 : idx + 1;
-          break;
         case 'Enter':
           targetIdx = event.shiftKey ? idx - cols : idx + cols;
+          break;
+        case 'Tab':
+          targetIdx = event.shiftKey ? idx - 1 : idx + 1;
           break;
         default:
           handled = false;
@@ -128,7 +130,6 @@ export class MonthEntryGridComponent {
     }
 
     if (handled) {
-      // tìm ô nhập hợp lệ
       while (targetIdx >= 0 && targetIdx < inputs.length) {
         const el = inputs[targetIdx]?.nativeElement;
         if (el && !el.readOnly) {
@@ -138,17 +139,15 @@ export class MonthEntryGridComponent {
         }
 
         // nhảy tiếp cùng hướng
-        if (['ArrowRight', 'Tab'].includes(event.key) && !event.shiftKey) targetIdx++;
-        else if (['ArrowLeft'].includes(event.key) || (event.key === 'Tab' && event.shiftKey))
-          targetIdx--;
+        if (['Tab'].includes(event.key) && !event.shiftKey) targetIdx++;
+        else if (event.key === 'Tab' && event.shiftKey) targetIdx--;
         else if (['ArrowDown', 'Enter'].includes(event.key) && !event.shiftKey) targetIdx += cols;
-        else if (['ArrowUp'].includes(event.key) || (event.key === 'Enter' && event.shiftKey))
+        else if (event.key === 'ArrowUp' || (event.key === 'Enter' && event.shiftKey))
           targetIdx -= cols;
         else break;
       }
     }
   }
-
   /** Tìm ô nhập liệu đầu tiên trong cột */
   private findFirstInColumn(
     colIndex: number,
@@ -178,6 +177,8 @@ export class MonthEntryGridComponent {
     }
     return null;
   }
+
+  //#endregion
 
   /** Lắng nghe Ctrl+S toàn cục */
   @HostListener('window:keydown', ['$event'])

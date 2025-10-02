@@ -8,8 +8,6 @@
     <tr>
       <th style="width: 5%">#</th>
       <th style="width: 40%">Chỉ tiêu</th>
-      <th style="width: 18%">Kế hoạch tháng</th>
-      <th style="width: 18%">Thực hiện tháng</th>
       <th style="width: 19%">Kế hoạch năm</th>
     </tr>
   </thead>
@@ -17,14 +15,11 @@
     <tr *ngFor="let d of details; index as i" [ngClass]="getRowClass(d.level)">
       <td>{{ i + 1 }}</td>
       <td>
-        <!-- <span *ngIf="d.prefix">{{ d.prefix }}.</span>
-        {{ d.chiTieuName }} -->
         <span [style.paddingLeft]="getIndent(d.level)">
           <span *ngIf="d.prefix">{{ d.prefix }}.</span>
-          {{ d.chiTieuName }} ({{d.chiTieuId}})
+          {{ d.chiTieuName }}
         </span>
       </td>
-      <!-- Plan -->
       <td>
         <input
           #cellInput
@@ -35,31 +30,10 @@
           [readonly]="!editable || !d.leafNode"
           [ngClass]="getInputClass(editable, d.leafNode)"
           [(ngModel)]="d.planValue"
-          (focus)="onFocus($event)"
+          (focus)="onFocus($event, d.leafNode, d, 'planValue')"
+          (blur)="onBlur($event, d, 'planValue')"
           (keydown)="onKeyDown($event, i, 0)"
-          (ngModelChange)="onCellChange(d, 'planValue', $event)"
-          [class.active-cell]="cellInput === activeElement" />
-      </td>
-
-      <!-- Actual -->
-      <td>
-        <input
-          #cellInput
-          type="text"
-          appViDecimal
-          [appViDecimalMin]="0"
-          class="form-control text-end"
-          [readonly]="!editable || !d.leafNode"
-          [ngClass]="getInputClass(editable, d.leafNode)"
-          [(ngModel)]="d.actualValue"
-          (focus)="onFocus($event)"
-          (keydown)="onKeyDown($event, i, 1)"
-          (ngModelChange)="onCellChange(d, 'actualValue', $event)"
-          [class.active-cell]="cellInput === activeElement" />
-      </td>
-      <!-- YearPlan (chỉ xem) -->
-      <td class="text-end text-muted">
-        {{ d.yearPlanValue | number : '1.0-2' : 'vi-VN' }}
+          (ngModelChange)="onCellChange(d, 'planValue', $event)" />
       </td>
     </tr>
   </tbody>

@@ -18,6 +18,12 @@ const routes: Routes = [
         loadChildren: () =>
           import('../features/month-entry/month-entry.module').then((m) => m.MonthEntryModule),
       },
+      {
+        path: 'year-entries/:khoiId',
+        loadChildren: () =>
+          import('../features/year-entry/year-entry.module').then((m) => m.YearEntryModule),
+      },
+      { path: 'admin', loadChildren: () => import('../features/admin/admin.module').then(m => m.AdminModule) },
     ],
   },
 ];

@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, finalize, map } from 'rxjs';
-import { ReportStatus, SaveMonthRequest, MonthDetail } from 'src/app/shared/models/month-entry';
+import { SaveMonthRequest, MonthDetail } from 'src/app/shared/models/month-entry';
 import { MonthResponse } from 'src/app/shared/models/month-entry/month-response.model';
 import { MonthEntryService } from './month-entry.service';
 import { AuthService } from 'src/app/core/services/auth.service';
+import { ReportStatus } from 'src/app/shared/models';
+import { getReportStatusText } from 'src/app/shared/utils';
 
 @Injectable({
   providedIn: 'root',
@@ -26,7 +28,7 @@ export class MonthEntryFacade {
 
   year$ = this.month$.pipe(map((m) => m?.nam ?? new Date().getFullYear()));
 
-  status$ = this.month$.pipe(map((m) => this.getStatusText(m?.status)));
+  status$ = this.month$.pipe(map((m) => getReportStatusText(m?.status)));
 
   isEditable$ = this.month$.pipe(
     map((m) => m?.status === ReportStatus.New || m?.status === ReportStatus.Draft)
@@ -112,15 +114,6 @@ export class MonthEntryFacade {
     this.dirtySubject.next(true);
   }
 
-   /** Map enum → text hiển thị */
-  private getStatusText(status?: number): string {
-    switch (status) {
-      case ReportStatus.New: return 'Mới tạo';
-      case ReportStatus.Draft: return 'Đang nhập';
-      case ReportStatus.Locked: return 'Đã khóa';
-      default: return 'Không rõ';
-    }
-  }
 
   // --- Lấy donViId từ auth (tùy bạn triển khai) ---
   private getDonViId(): number {    

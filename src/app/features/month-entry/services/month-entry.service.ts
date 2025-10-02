@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { MonthResponse } from 'src/app/shared/models/month-entry/month-response.model';
-import { ReportStatus } from 'src/app/shared/models/month-entry/report-status.enum';
+import { ReportStatus } from 'src/app/shared/models/report-status.enum';
 import { SaveMonthRequest } from 'src/app/shared/models/month-entry/save-month-request.model';
 import { environment } from 'src/environments/environment';
 

@@ -94,6 +94,11 @@
     margin: 0;
     list-style: none;
 
+    a.disabled {
+      pointer-events: none;
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
     .nav-item {
       .nav-link {
         padding: 12px 20px;

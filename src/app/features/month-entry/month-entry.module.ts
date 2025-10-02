@@ -8,8 +8,7 @@ import { MonthEntryActionsComponent } from './components/month-entry-actions/mon
 
 @NgModule({
   declarations: [    
-    MonthEntryPageComponent,
-    
+    MonthEntryPageComponent,    
     MonthEntryGridComponent,
     MonthEntryActionsComponent
   ],
