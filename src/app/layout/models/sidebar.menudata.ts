@@ -1,3 +1,4 @@
+// src/app/layout/models/sidebar.menudata.ts
 import { SidebarMenuItem } from './sidebar-menu-item.model';
 
 export const SIDEBAR_MENU: SidebarMenuItem[] = [
@@ -10,19 +11,31 @@ export const SIDEBAR_MENU: SidebarMenuItem[] = [
         label: 'Trang chính',
         icon: 'fas fa-tachometer-alt',
         routerLink: '/',
+        roles: ['Admin', 'NhapLieu', 'BaoCao'], // các role được phép truy cập
         exact: true,
       },
+    ],
+  },
+   {
+    key: 'admin',
+    label: 'Quản trị',
+    icon: 'fas fa-users-cog',
+    khoiId: 0,
+    children: [
+      { label: 'Người dùng', icon: 'fas fa-user-friends', routerLink: '/admin/users',roles:['Admin'] },
+      { label: 'Đơn vị', icon: 'fas fa-building', routerLink: '/admin/units',roles:['Admin'] },
+      { label: 'Chỉ tiêu', icon: 'fas fa-chart-bar', routerLink: '/admin/targets',roles:['Admin'] },
     ],
   },
   {
     key: 'toannganh',
     label: 'Toàn ngành',
     icon: 'fas fa-sitemap',
-    khoiId: 2,
+    khoiId: -1,
     children: [
-      { label: 'Kế hoạch tháng', icon: 'fas fa-calendar-alt', routerLink: '/month-entries' },
-      { label: 'Kế hoạch năm', icon: 'fas fa-calendar', routerLink: '/year-entries' },
-      { label: 'Báo cáo', icon: 'fas fa-chart-bar', routerLink: '/report' },
+      { label: 'Kế hoạch tháng', icon: 'fas fa-calendar-alt', routerLink: '/month-entries',roles:['ToanNganh'] },
+      { label: 'Kế hoạch năm', icon: 'fas fa-calendar', routerLink: '/year-entries',roles:['ToanNganh'] },
+      { label: 'Báo cáo', icon: 'fas fa-chart-bar', routerLink: '/report',roles:['ToanNganh'] },
     ],
   },
   {
@@ -31,9 +44,9 @@ export const SIDEBAR_MENU: SidebarMenuItem[] = [
     icon: 'fas fa-train',
     khoiId: 2,
     children: [
-      { label: 'Kế hoạch tháng', icon: 'fas fa-calendar-alt', routerLink: '/month-entries' },
-      { label: 'Kế hoạch năm', icon: 'fas fa-calendar', routerLink: '/year-entries' },
-      { label: 'Báo cáo', icon: 'fas fa-chart-bar', routerLink: '/report' },
+     { label: 'Kế hoạch tháng', icon: 'fas fa-calendar-alt', routerLink: '/month-entries',roles:['NhapLieu'] },
+      { label: 'Kế hoạch năm', icon: 'fas fa-calendar', routerLink: '/year-entries',roles:['NhapLieu'] },
+      { label: 'Báo cáo', icon: 'fas fa-chart-bar', routerLink: '/report',roles:['BaoCao'] },
     ],
   },
   {
@@ -42,9 +55,9 @@ export const SIDEBAR_MENU: SidebarMenuItem[] = [
     icon: 'fas fa-industry',
     khoiId: 4,
     children: [
-      { label: 'Kế hoạch tháng', icon: 'fas fa-calendar-alt', routerLink: '/month-entries' },
-      { label: 'Kế hoạch năm', icon: 'fas fa-calendar', routerLink: '/year-entries' },
-      { label: 'Báo cáo', icon: 'fas fa-chart-bar', routerLink: '/report' },
+      { label: 'Kế hoạch tháng', icon: 'fas fa-calendar-alt', routerLink: '/month-entries',roles:['NhapLieu'] },
+      { label: 'Kế hoạch năm', icon: 'fas fa-calendar', routerLink: '/year-entries',roles:['NhapLieu'] },
+      { label: 'Báo cáo', icon: 'fas fa-chart-bar', routerLink: '/report',roles:['BaoCao'] },
     ],
   },
   {
@@ -53,19 +66,20 @@ export const SIDEBAR_MENU: SidebarMenuItem[] = [
     icon: 'fas fa-road',
     khoiId: 8,
    children: [
-      { label: 'Kế hoạch tháng', icon: 'fas fa-calendar-alt', routerLink: '/month-entries' },
-      { label: 'Kế hoạch năm', icon: 'fas fa-calendar', routerLink: '/year-entries' },
-      { label: 'Báo cáo', icon: 'fas fa-chart-bar', routerLink: '/report' },
+      { label: 'Kế hoạch tháng', icon: 'fas fa-calendar-alt', routerLink: '/month-entries',roles:['NhapLieu'] },
+      { label: 'Kế hoạch năm', icon: 'fas fa-calendar', routerLink: '/year-entries',roles:['NhapLieu'] },
+      { label: 'Báo cáo', icon: 'fas fa-chart-bar', routerLink: '/report',roles:['BaoCao'] },
     ],
   },
   {
     key: 'ttth',
     label: 'Thông tin tín hiệu',
     icon: 'fas fa-traffic-light',
+      khoiId: 9,
     children: [
-      { label: 'Kế hoạch tháng', icon: 'fas fa-calendar-alt', routerLink: '/month-entries' },
-      { label: 'Kế hoạch năm', icon: 'fas fa-calendar', routerLink: '/year-entries' },
-      { label: 'Báo cáo', icon: 'fas fa-chart-bar', routerLink: '/report' },
+     { label: 'Kế hoạch tháng', icon: 'fas fa-calendar-alt', routerLink: '/month-entries',roles:['NhapLieu'] },
+      { label: 'Kế hoạch năm', icon: 'fas fa-calendar', routerLink: '/year-entries',roles:['NhapLieu'] },
+      { label: 'Báo cáo', icon: 'fas fa-chart-bar', routerLink: '/report',roles:['BaoCao'] },
     ],
   },
 ];
