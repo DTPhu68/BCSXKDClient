@@ -26,6 +26,8 @@ export class MonthEntryPageComponent {
   year = new Date().getFullYear();
   loading = false;
   khoiId: number = 0;
+ lastSavedTime: Date | null = null;
+  dirty = false;
 
   constructor(public facade: MonthEntryFacade, private route: ActivatedRoute) {}
 
@@ -42,7 +44,7 @@ export class MonthEntryPageComponent {
   loadData() {
     this.loading = true;
     setTimeout(() => {
-      this.facade.loadMonth(this.month, this.year);      
+      this.facade.loadMonth(this.month, this.year);
       this.loading = false;
     }, 500);
   }
@@ -58,10 +60,19 @@ export class MonthEntryPageComponent {
   }
 
   onDetailChange(updatedDetails: MonthDetail[]) {
+     this.dirty = true;
     this.facade.updateDetails(updatedDetails);
   }
+ 
 
+  markDirty() {
+    this.dirty = true;
+  }
   onSave() {
     this.facade.saveMonth();
+    this.dirty = false;
+    this.lastSavedTime = new Date();
+     // Ẩn sau 3 giây (tùy bạn)
+    //setTimeout(() => (this.lastSavedTime = null), 3000);
   }
 }
