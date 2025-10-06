@@ -183,11 +183,36 @@ export class YearEntryGridComponent implements OnInit {
   /** Lắng nghe Ctrl+S toàn cục */
   @HostListener('window:keydown', ['$event'])
   handleGlobalKeydown(event: KeyboardEvent) {
+    const key = event.key.toLowerCase();
+    // Ctrl+S để lưu
     if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 's') {
       event.preventDefault();
       this.save.emit();
     }
+    // 🟢 Ctrl+A để focus vào ô nhập đầu tiên
+    if ((event.ctrlKey || event.metaKey) && key === 'a') {
+      event.preventDefault();
+      this.focusFirstEditableCell();
+      return;
+    }
   }
+
+  /** Focus vào ô nhập đầu tiên có thể sửa */
+  private focusFirstEditableCell() {
+    const first = this.cellInputs
+      .toArray()
+      .find((ref) => !ref.nativeElement.readOnly && ref.nativeElement.offsetParent !== null);
+    if (first) {
+      setTimeout(() => first.nativeElement.focus(), 0);
+    }
+  }
+  // @HostListener('window:keydown', ['$event'])
+  // handleGlobalKeydown(event: KeyboardEvent) {
+  //   if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 's') {
+  //     event.preventDefault();
+  //     this.save.emit();
+  //   }
+  // }
   /** CSS class cho ô input */
   getInputClass(editable: boolean, leaf: boolean): string {
     if (!editable || !leaf) return 'bg-light';

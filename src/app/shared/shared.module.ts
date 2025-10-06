@@ -10,19 +10,21 @@ import { NotFoundComponent } from './pages/not-found.component';
 import { ServerErrorComponent } from './pages/server-error.component';
 import { UnauthorizedComponent } from './pages/unauthorized.component';
 import { ViDecimalValueAccessor } from './directives/vi-decimal.value-accessor';
+import { AutofocusDirective } from './directives/autofocus.directive';
 
 @NgModule({
   declarations: [
     NotFoundComponent,
     ServerErrorComponent,
     UnauthorizedComponent,
-     ViDecimalValueAccessor,
+    ViDecimalValueAccessor,
+    AutofocusDirective,
   ],
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    NgSelectModule,    
+    NgSelectModule,
     BsDropdownModule.forRoot(),
     TooltipModule.forRoot(),
     ModalModule.forRoot(),
@@ -40,7 +42,8 @@ import { ViDecimalValueAccessor } from './directives/vi-decimal.value-accessor';
     NotFoundComponent,
     ServerErrorComponent,
     UnauthorizedComponent,
-     ViDecimalValueAccessor,
+    ViDecimalValueAccessor,
+    AutofocusDirective,
   ],
 })
 export class SharedModule {}

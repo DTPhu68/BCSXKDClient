@@ -13,7 +13,7 @@ export class HeaderComponent {
   roles: string[] = ['Admin', 'User', 'Manager'];
   // currentUser = { fullName: 'Nguyen Van A' }; // Giả sử bạn có thông tin người dùng hiện tại
   currentUser: Partial<AuthUser> | null = null;
-  
+  today: Date = new Date(); // Stores the current date and time
 
   constructor(private authService: AuthService) {}
 

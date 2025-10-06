@@ -23,7 +23,15 @@ const routes: Routes = [
         loadChildren: () =>
           import('../features/year-entry/year-entry.module').then((m) => m.YearEntryModule),
       },
-      { path: 'admin', loadChildren: () => import('../features/admin/admin.module').then(m => m.AdminModule) },
+      {
+        path: 'admin',
+        loadChildren: () => import('../features/admin/admin.module').then((m) => m.AdminModule),
+      },
+      {
+        path: 'toan-nganh',
+        loadChildren: () =>
+          import('../features/toan-nganh/toan-nganh.module').then((m) => m.ToanNganhModule),
+      },
     ],
   },
 ];

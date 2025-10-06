@@ -108,20 +108,41 @@ export class SidebarComponent implements OnInit {
     }
   }
 
-  hasAccess(item: { roles?: string[]; khoiId?: number }): boolean {
+  // hasAccess(item: { roles?: string[]; khoiId?: number; children?: any[] }): boolean {
+  //   const user = this.authService.getCurrentUser();
+  //   if (!user) return false;
+  //   // check role
+  //   if (item.roles && !item.roles.some((r) => user.roles.includes(r))) {
+  //     return false;
+  //   }
+
+  //   // check khoiId (so sánh cả khi = 0)
+  //   if (item.khoiId !== undefined && item.khoiId > 0 && item.khoiId !== user.khoiId) {
+  //     return false;
+  //   }
+
+  //   return true;
+  // }
+  hasAccess(item: { roles?: string[]; khoiId?: number; children?: any[] }): boolean {
     const user = this.authService.getCurrentUser();
     if (!user) return false;
 
-    // check role
+    // 1️⃣ Kiểm tra role trực tiếp của item (nếu có)
     if (item.roles && !item.roles.some((r) => user.roles.includes(r))) {
       return false;
     }
 
-    // check khoiId (so sánh cả khi = 0)
-    if (item.khoiId !== undefined && item.khoiId !== user.khoiId) {
+    // 2️⃣ Kiểm tra khoiId (nếu được set và khác 0)
+    if (item.khoiId !== undefined && item.khoiId > 0 && item.khoiId !== user.khoiId) {
       return false;
     }
 
+    // 3️⃣ Nếu có children -> cha hợp lệ khi có ít nhất 1 child hợp lệ
+    if (item.children && item.children.length > 0) {
+      return item.children.some((child) => this.hasAccess(child));
+    }
+
+    // 4️⃣ Nếu không có children -> trả về true (đã qua kiểm tra role & khoi)
     return true;
   }
 }

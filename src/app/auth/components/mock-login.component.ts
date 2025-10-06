@@ -37,6 +37,8 @@ export class MockLoginComponent {
           this.router.navigate(['/month-entries',currentUser.khoiId]);
         } else if(currentUser.roles.includes('BaoCao')) {
           this.router.navigate(['/reports',currentUser.khoiId]);
+        } else if(currentUser.roles.includes('ToanNganh')) {
+          this.router.navigate(['/toan-nganh']);  
         } else {
           this.router.navigate(['/unauthorized']);
         }        

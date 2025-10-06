@@ -1,6 +1,4 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-
 import { AdminRoutingModule } from './admin-routing.module';
 import { UserListComponent } from './components/users/user-list/user-list.component';
 import { UserFormComponent } from './components/users/user-form/user-form.component';
@@ -8,6 +6,7 @@ import { UnitListComponent } from './components/units/unit-list/unit-list.compon
 import { UnitFormComponent } from './components/units/unit-form/unit-form.component';
 import { TargetListComponent } from './components/targets/target-list/target-list.component';
 import { TargetFormComponent } from './components/targets/target-form/target-form.component';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 
 
@@ -21,7 +20,7 @@ import { TargetFormComponent } from './components/targets/target-form/target-for
     TargetFormComponent,
   ],
   imports: [
-    CommonModule,
+    SharedModule,
     AdminRoutingModule
   ]
 })

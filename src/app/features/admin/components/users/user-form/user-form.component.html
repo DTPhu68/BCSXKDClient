@@ -1,1 +1,90 @@
-<p>user-form works!</p>
+<div class="modal-header">
+  <h5 class="modal-title">{{ mode === 'create' ? 'Thêm người dùng' : 'Sửa người dùng' }}</h5>
+  <button type="button" class="btn-close" aria-label="Close" (click)="bsModalRef.hide()"></button>
+</div>
+<div class="modal-body">
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" id="userForm">
+    <div class="mb-3">
+      <label>Username</label>
+      <input #userNameInput class="form-control" formControlName="userName" />
+      <!-- lỗi required -->
+      <div
+        class="text-danger"
+        *ngIf="form.controls['userName'].touched && form.controls['userName'].hasError('required')">
+        Username là bắt buộc
+      </div>
+      <!-- lỗi minLength -->
+      <div
+        class="text-danger"
+        *ngIf="
+          form.controls['userName'].touched && form.controls['userName'].hasError('minlength')
+        ">
+        Username phải có ít nhất 5 ký tự
+      </div>
+      <!-- lỗi maxLength -->
+      <div
+        class="text-danger"
+        *ngIf="
+          form.controls['userName'].touched && form.controls['userName'].hasError('maxlength')
+        ">
+        Username không được quá 50 ký tự
+      </div>
+      <!-- lỗi trùng -->
+      <div
+        class="text-danger"
+        *ngIf="
+          form.controls['userName'].touched && form.controls['userName'].hasError('userNameExists')
+        ">
+        Username đã tồn tại
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label>Họ tên</label>
+      <input class="form-control" formControlName="fullName" />
+      <div
+        class="text-danger"
+        *ngIf="form.controls['fullName'].touched && form.controls['fullName'].hasError('required')">
+        Họ tên là bắt buộc
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label>Đơn vị</label>
+      <ng-select
+        [items]="donViOptions"
+        bindLabel="name"
+        bindValue="id"
+        formControlName="donViId"
+        placeholder="Chọn đơn vị"></ng-select>
+      <div
+        class="text-danger"
+        *ngIf="form.controls['donViId'].touched && form.controls['donViId'].hasError('required')">
+        Vui lòng chọn đơn vị
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label>Roles</label>
+      <div *ngFor="let r of roles">
+        <input
+          type="checkbox"
+          [value]="r.id"
+          (change)="onRoleChange(r.id, $event.target.checked)"
+          [checked]="form.value.roleIds.includes(r.id)" />
+        {{ r.name }}
+      </div>
+    </div>
+
+    <div class="mb-3 form-check">
+      <input type="checkbox" class="form-check-input" formControlName="isActive" />
+      <label class="form-check-label">Active</label>
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-secondary" (click)="bsModalRef.hide()">Đóng</button>
+  <button type="submit" form="userForm" class="btn btn-primary" [disabled]="form.invalid">
+    Lưu
+  </button>
+</div>

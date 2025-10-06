@@ -31,11 +31,11 @@ export const SIDEBAR_MENU: SidebarMenuItem[] = [
     key: 'toannganh',
     label: 'Toàn ngành',
     icon: 'fas fa-sitemap',
-    khoiId: -1,
+    khoiId: 0,
     children: [
-      { label: 'Kế hoạch tháng', icon: 'fas fa-calendar-alt', routerLink: '/month-entries',roles:['ToanNganh'] },
-      { label: 'Kế hoạch năm', icon: 'fas fa-calendar', routerLink: '/year-entries',roles:['ToanNganh'] },
-      { label: 'Báo cáo', icon: 'fas fa-chart-bar', routerLink: '/report',roles:['ToanNganh'] },
+      { label: 'Toàn ngành', icon: 'fas fa-calendar-alt', routerLink: '/toan-nganh',roles:['ToanNganh'] },
+      { label: 'Kiểm tra tháng', icon: 'fas fa-calendar', routerLink: '/toan-nganh/month-check',roles:['ToanNganh'] },
+      { label: 'Kiểm tra năm', icon: 'fas fa-chart-bar', routerLink: '/toan-nganh/year-check',roles:['ToanNganh'] },
     ],
   },
   {

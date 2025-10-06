@@ -25,19 +25,26 @@
 
     <div class="text-end">
       <div class="fw-bold">
-        Đơn vị: {{ (facade.companyName$ | async) || '' }} tháng {{ month }} năm {{ year }} khoiId {{ khoiId }}
+        Đơn vị: {{ (facade.companyName$ | async) || '' }} tháng {{ month }} năm {{ year }} khoiId
+        {{ khoiId }}
       </div>
       <!-- ✅ Trạng thái -->
       <div *ngIf="facade.status$ | async as status" class="badge bg-primary mt-1">
         {{ status }}
       </div>
       <!-- ✅ Dirty state -->
-      <div *ngIf="facade.dirty$ | async; else clean" class="small text-danger fst-italic mt-1">
+      <!-- <div *ngIf="facade.dirty$ | async; else clean" class="small text-danger fst-italic mt-1">
         Có thay đổi, hãy lưu trước khi thoát
       </div>
       <ng-template #clean>
         <div class="small text-muted fst-italic mt-1">Chưa có thay đổi</div>
-      </ng-template>
+      </ng-template> -->
+      <div class="small text-muted mb-2">      
+        <span *ngIf="dirty" class="text-danger ms-2">🔸 Có thay đổi, nhớ Ctrl+S để lưu</span>
+        <span *ngIf="lastSavedTime" class="text-success ms-2">
+          ✅ Đã lưu lúc {{ lastSavedTime | date : 'HH:mm:ss' }}
+        </span>
+      </div>
     </div>
   </div>
 
@@ -50,6 +57,7 @@
       [addToRelations]="facade.addToRelations$ | async"
       [editable]="facade.isEditable$ | async"
       (detailChange)="onDetailChange($event)"
+      (detailChange)="markDirty()"
       (save)="onSave()"></app-month-entry-grid>
     <div *ngIf="facade.loading$ | async" class="text-center text-muted p-4" [@fadeInOut]>
       <div class="spinner-border text-primary"></div>

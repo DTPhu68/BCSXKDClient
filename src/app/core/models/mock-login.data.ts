@@ -1,10 +1,16 @@
 import { MockKhoiGroup } from './mock-login.model';
 
 export const MOCK_LOGIN_DATA: MockKhoiGroup[] = [
+   {
+    khoiName: 'quantri',
+    users: [
+      { userName: 'tctds', fullUnitName: 'TCT Đường sắt' },      
+    ],
+  },
   {
     khoiName: 'Toàn ngành',
     users: [
-      { userName: 'tctds', fullUnitName: 'TCT Đường sắt' },      
+      { userName: 'minhthuy', fullUnitName: 'Minh Thúy' },      
     ],
   },
   {

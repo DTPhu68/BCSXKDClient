@@ -40,6 +40,7 @@
       <!-- item có nhiều child (submenu) -->
       <li class="nav-item" *ngIf="item.children && item.children.length > 1">
         <!-- item có submenu -->
+          <!-- [class.disabled]="!hasAccess(item)" -->
         <a
           (click)="hasAccess(item) && toggleSubmenu(item.key)"
           class="nav-link"

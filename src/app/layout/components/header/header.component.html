@@ -8,14 +8,15 @@
       </button>
 
       <!-- Search Form -->
-      <form class="d-none d-lg-flex search-form">
-        <div class="input-group">
-          <input type="text" class="form-control" placeholder="Tìm kiếm..." />
-          <button class="btn btn-outline-secondary" type="submit">
-            <i class="fas fa-search"></i>
-          </button>
+      <!-- <form class="d-none d-lg-flex search-form align-items-center">
+        <div class="text-muted small px-2">
+          <i class="fas fa-info-circle me-1"></i>
+          {{ today | date : 'dd/MM/yyyy' }} · {{ currentUser?.roles?.[0] }}
         </div>
-      </form>
+      </form> -->
+      <div class="d-none d-lg-flex flex-grow-1 justify-content-center align-items-center">
+        <span>Báo cáo tình hình SXKD <span class="text-muted small">{{ today | date : 'dd/MM/yyyy' }}</span></span>
+      </div>
 
       <!-- Right Menu -->
       <ul class="navbar-nav ms-auto">
@@ -31,7 +32,8 @@
             <li class="dropdown-header text-center">
               <i class="fas fa-user-circle fa-2x text-secondary"></i>
               <p>
-                {{ currentUser?.fullName }}<br />
+                {{ currentUser?.fullName }}
+                <br />
                 <small class="text-muted" *ngFor="let role of currentUser?.roles; let i = index">
                   {{ role }}
                   <br />

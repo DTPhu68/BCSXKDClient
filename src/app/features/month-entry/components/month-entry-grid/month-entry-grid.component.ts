@@ -28,24 +28,47 @@ export class MonthEntryGridComponent {
 
   activeElement?: ElementRef<HTMLInputElement>;
 
-   ngOnInit(): void {
-    //console.log('YearEntryGridComponent initialized with details:', this.details);
-    console.log('Editable:', this.editable);
+  // 🟡 Lưu lại snapshot ban đầu
+  private originalValues = new Map<number, { plan: number; actual: number }>();
+  isDirty = false;
+  lastSavedTime: Date | null = null;
+
+  ngOnInit(): void {
+    // Ghi nhận giá trị ban đầu khi load dữ liệu
+    this.snapshotOriginalValues();
   }
+  /** Ghi lại snapshot ban đầu */
+  private snapshotOriginalValues() {
+    this.originalValues.clear();
+    for (const d of this.details) {
+      this.originalValues.set(d.chiTieuId, {
+        plan: d.planValue ?? 0,
+        actual: d.actualValue ?? 0,
+      });
+    }
+  }
+
   /** Khi thay đổi giá trị một ô */
   onCellChange(
     detail: MonthDetail,
     field: keyof Pick<MonthDetail, 'planValue' | 'actualValue'>,
     value: number
   ) {
-    detail[field] = value || 0;
+    detail[field] = Number(value ?? 0);
 
     if (detail.leafNode) {
       this.updateAddToValues(detail, field);
     }
 
-    // Emit full list để facade cập nhật
-    this.detailChange.emit(this.details);
+    // Kiểm tra khác với giá trị gốc
+    const original = this.originalValues.get(detail.chiTieuId);
+    const changed =
+      original && (detail.planValue !== original.plan || detail.actualValue !== original.actual);
+
+    if (changed) {
+      this.isDirty = true; // 🟢 hiển thị cảnh báo "Có thay đổi"
+      this.detailChange.emit(this.details);
+    }
   }
 
   private updateAddToValues(
@@ -72,6 +95,7 @@ export class MonthEntryGridComponent {
     // setTimeout(() => input.select(), 0);
     const input = event.target as HTMLInputElement;
     this.activeElement = this.cellInputs.find((ref) => ref.nativeElement === input);
+
     setTimeout(() => input.select(), 0);
   }
 
@@ -182,11 +206,47 @@ export class MonthEntryGridComponent {
   /** Lắng nghe Ctrl+S toàn cục */
   @HostListener('window:keydown', ['$event'])
   handleGlobalKeydown(event: KeyboardEvent) {
-    if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 's') {
+    const key = event.key.toLowerCase();
+
+    // Ctrl+S để lưu
+    if ((event.ctrlKey || event.metaKey) && key === 's') {
       event.preventDefault();
       this.save.emit();
+     
+      // 🟢 reset trạng thái dirty và cập nhật giờ lưu
+      this.isDirty = false;
+      this.lastSavedTime = new Date();
+
+      this.snapshotOriginalValues();
+      return;
+    }
+
+    // 🟢 Ctrl+A để focus vào ô nhập đầu tiên
+    if ((event.ctrlKey || event.metaKey) && key === 'a') {
+      event.preventDefault();
+      this.focusFirstEditableCell();
+      return;
     }
   }
+
+  /** Focus vào ô nhập đầu tiên có thể sửa */
+  private focusFirstEditableCell() {
+    const first = this.cellInputs
+      .toArray()
+      .find((ref) => !ref.nativeElement.readOnly && ref.nativeElement.offsetParent !== null);
+    if (first) {
+      setTimeout(() => first.nativeElement.focus(), 0);
+    }
+  }
+  // @HostListener('window:keydown', ['$event'])
+  // handleGlobalKeydown(event: KeyboardEvent) {
+  //   if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 's') {
+  //     event.preventDefault();
+  //     this.save.emit();
+  //     this.snapshotOriginalValues(); // ✅ Reset trạng thái dirty sau khi lưu
+  //   }
+  // }
+
   /** CSS class cho ô input */
   getInputClass(editable: boolean, leaf: boolean): string {
     if (!editable || !leaf) return 'bg-light';

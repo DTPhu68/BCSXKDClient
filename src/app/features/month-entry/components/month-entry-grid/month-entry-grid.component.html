@@ -1,7 +1,9 @@
 <div class="small text-muted mb-2">
   <strong>Phím tắt:</strong>
   ↑ ↓ ← → để di chuyển • Enter/Shift+Enter để xuống/lên • Tab/Shift+Tab để qua phải/trái •
-  Ctrl+Arrow để nhảy đầu/cuối • Ctrl+S để lưu
+  Ctrl+Arrow để nhảy đầu/cuối •
+  <span class="text-primary">Ctrl+A để về ô đầu tiên</span>
+  • Ctrl+S để lưu
 </div>
 <table class="table table-bordered table-sm">
   <thead class="table-light">
@@ -21,7 +23,7 @@
         {{ d.chiTieuName }} -->
         <span [style.paddingLeft]="getIndent(d.level)">
           <span *ngIf="d.prefix">{{ d.prefix }}.</span>
-          {{ d.chiTieuName }} ({{d.chiTieuId}})
+          {{ d.chiTieuName }} ({{ d.chiTieuId }})
         </span>
       </td>
       <!-- Plan -->
