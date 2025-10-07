@@ -1,0 +1,28 @@
+.table tbody tr.group-row {
+  background-color: #f5f7fa; /* xám nhạt - nhóm tổng */
+  font-weight: 600;
+  color: #333;
+}
+
+.table tbody tr.leaf-row {
+  background-color: #f1fff3; /* xanh nhạt - chỉ tiêu nhập liệu */
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.table tbody tr.leaf-row:hover {
+  background-color: #dbffe1; /* hover xanh đậm hơn */
+}
+
+.table tbody tr.inactive-row {
+  opacity: 0.6;
+}
+
+.table tbody tr:hover {
+  background-color: #eef7ff;
+}
+
+.table td,
+.table th {
+  vertical-align: middle;
+}

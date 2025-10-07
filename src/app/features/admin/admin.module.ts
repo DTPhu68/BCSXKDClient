@@ -7,6 +7,7 @@ import { UnitFormComponent } from './components/units/unit-form/unit-form.compon
 import { TargetListComponent } from './components/targets/target-list/target-list.component';
 import { TargetFormComponent } from './components/targets/target-form/target-form.component';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { TargetAddfromFormComponent } from './components/targets/target-addfrom-form/target-addfrom-form.component';
 
 
 
@@ -18,6 +19,7 @@ import { SharedModule } from 'src/app/shared/shared.module';
     UnitFormComponent,
     TargetListComponent,
     TargetFormComponent,
+    TargetAddfromFormComponent,
   ],
   imports: [
     SharedModule,

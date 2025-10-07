@@ -32,6 +32,10 @@ export class UserListComponent {
   sortColumn: string = '';
   sortAsc: boolean = true;
 
+  viewMode: 'table' | 'tree' = 'table';
+  unitTree: any[] = [];
+  roleTree: any[] = [];
+
   constructor(
     private userService: UserService,
     private modalService: BsModalService,
@@ -48,9 +52,54 @@ export class UserListComponent {
       next: (data) => {
         this.users = data;
         this.filter();
+        this.buildGroupedTrees(); // ✅ chỉ gọi 1 lần sau khi tải users
       },
       error: () => this.alertService.error('Lỗi tải danh sách người dùng'),
     });
+  }
+
+  onViewModeChange(mode: 'table' | 'tree') {
+    this.viewMode = mode; 
+  }
+
+  buildGroupedTrees() {
+    const unitGrouped: { [unitId: number]: any } = {};
+    const roleGrouped: { [role: string]: any } = {};
+
+    this.users.forEach((user) => {
+      // === Nhóm theo ĐƠN VỊ ===
+      if (!unitGrouped[user.donViId]) {
+        unitGrouped[user.donViId] = {
+          unitName: user.donViName,
+          users: [],
+        };
+      }
+      unitGrouped[user.donViId].users.push({
+        fullName: user.fullName,
+        userName: user.userName,
+        roles: user.roles,
+        isActive: user.isActive,
+      });
+
+      // === Nhóm theo ROLE ===
+      user.roles.forEach((r) => {
+        if (!roleGrouped[r]) {
+          roleGrouped[r] = {
+            roleName: r,
+            users: [],
+          };
+        }
+        roleGrouped[r].users.push({
+          fullName: user.fullName,
+          userName: user.userName,
+          donViName: user.donViName,
+          isActive: user.isActive,
+        });
+      });
+    });
+
+    this.unitTree = Object.values(unitGrouped);
+    this.roleTree = Object.values(roleGrouped);
   }
 
   filter() {

@@ -1,1 +1,80 @@
-<p>target-list works!</p>
+<div class="d-flex justify-content-between mb-3">
+  <div class="d-flex gap-2">
+    <!-- Dropdown chọn khối -->
+    <select
+      class="form-select"
+      style="width: 250px"
+      [(ngModel)]="selectedKhoi"
+      (change)="onKhoiChange()">
+      <option [ngValue]="null">-- Chọn khối --</option>
+      <option *ngFor="let k of khois" [ngValue]="k.id">{{ k.name }}</option>
+    </select>
+
+    <!-- Ô tìm kiếm -->
+    <input
+      [(ngModel)]="searchTerm"
+      (input)="applyFilter()"
+      class="form-control"
+      style="width: 250px"
+      placeholder="Tìm chỉ tiêu..." />
+  </div>
+</div>
+
+<!-- Bảng chỉ tiêu có thanh cuộn -->
+<div class="table-responsive" style="max-height: 70vh; overflow-y: auto">
+  <table class="table table-sm table-hover align-middle">
+    <thead class="table-light sticky-top">
+      <tr>
+        <th style="width: 50px">#</th>
+        <th>Tên chỉ tiêu</th>
+        <th style="width: 80px">Prefix</th>
+        <th style="width: 60px">Lv</th>
+        <th style="width: 80px">Leaf</th>
+        <th style="width: 80px">Active</th>
+        <th>Cộng từ các chỉ tiêu</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr
+        *ngFor="let t of filtered; let i = index"
+        [class.leaf-row]="t.leafNode"
+        [class.group-row]="!t.leafNode"
+        [class.inactive-row]="!t.isActive">
+        <td>{{ i + 1 }}</td>
+
+        <td>
+          <span [ngStyle]="{ 'padding-left.px': t.level * 20 }">
+            <i *ngIf="!t.leafNode" class="fas fa-folder-open text-primary me-1"></i>
+            <i *ngIf="t.leafNode" class="fas fa-leaf text-success me-1"></i>
+            {{ t.chiTieuName }}
+          </span>
+        </td>
+
+        <td class="text-center">{{ t.prefix }}</td>
+        <td class="text-center">{{ t.level }}</td>
+        <td class="text-center">
+          <i *ngIf="t.leafNode" class="fa fa-check text-success"></i>
+        </td>
+        <td class="text-center">
+          <i *ngIf="t.isActive" class="fa fa-circle text-success"></i>
+          <i *ngIf="!t.isActive" class="fa fa-circle text-danger"></i>
+        </td>
+        <td>
+          <ul class="mb-0">
+            <li *ngFor="let c of t.addFromList">{{ c.id }} - {{ c.chiTieuName }}</li>
+          </ul>
+        </td>
+        <td>
+          <button
+            class="btn btn-sm btn-outline-primary"
+            *ngIf="!t.leafNode"
+            (click)="openAddFromForm(t)">
+            <i class="fa fa-link"></i>
+            Cộng chỉ tiêu con
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

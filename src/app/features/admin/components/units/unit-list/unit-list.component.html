@@ -1,1 +1,61 @@
-<p>unit-list works!</p>
+<div class="d-flex justify-content-between mb-3">
+  <div class="d-flex gap-2">
+    <input
+      [(ngModel)]="searchTerm"
+      (input)="applyFilter()"
+      class="form-control"
+      style="width: 250px"
+      placeholder="Tìm đơn vị..." />
+
+    <select
+      class="form-select"
+      style="width: 200px"
+      [(ngModel)]="selectedKhoi"
+      (change)="applyFilter()">
+      <option [ngValue]="'all'">Tất cả khối</option>
+      <option *ngFor="let k of khois" [ngValue]="k.id">{{ k.name }}</option>
+    </select>
+
+    <select
+      class="form-select"
+      style="width: 150px"
+      [(ngModel)]="statusFilter"
+      (change)="applyFilter()">
+      <option value="all">Tất cả</option>
+      <option value="active">Active</option>
+      <option value="inactive">Inactive</option>
+    </select>
+  </div>
+</div>
+
+<table class="table table-bordered table-hover">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Đơn vị</th>
+      <th>Khối</th>
+      <th>ParentId</th>
+      <th>Trạng thái</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let d of paged; let i = index">
+      <td>{{ (currentPage - 1) * itemsPerPage + i + 1 }}</td>
+      <td>{{ d.donViName }}</td>
+      <td>{{ d.khoiName }}</td>
+      <td>{{ d.parentDonViId }}</td>
+      <td>
+        <span [class.text-success]="d.isActive" [class.text-danger]="!d.isActive">
+          {{ d.isActive ? 'Active' : 'Inactive' }}
+        </span>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<pagination
+  [totalItems]="filtered.length"
+  [(ngModel)]="currentPage"
+  [itemsPerPage]="itemsPerPage"
+  (pageChanged)="setPage($event.page)"
+  class="justify-content-center"></pagination>

@@ -1,0 +1,22 @@
+<div class="modal-header">
+  <h5 class="modal-title">Cộng chỉ tiêu con vào: {{ parentTarget.chiTieuName }}</h5>
+  <button type="button" class="btn-close" (click)="close()"></button>
+</div>
+
+<div class="modal-body" style="max-height: 65vh; overflow-y: auto">
+  <div *ngFor="let t of leafTargets" class="form-check ms-3">
+    <input
+      class="form-check-input"
+      type="checkbox"
+      [checked]="selectedIds.has(t.id)"
+      (change)="toggleSelection(t.id)" />
+    <label class="form-check-label">
+      <span [ngStyle]="{ 'padding-left.px': t.level * 15 }">{{ t.id }} - {{ t.chiTieuName }}</span>
+    </label>
+  </div>
+</div>
+
+<div class="modal-footer">
+  <button class="btn btn-secondary" (click)="close()">Đóng</button>
+  <button class="btn btn-primary" (click)="save()">Lưu thay đổi</button>
+</div>

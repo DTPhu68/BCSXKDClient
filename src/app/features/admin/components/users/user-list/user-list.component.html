@@ -1,83 +1,176 @@
-<div class="d-flex justify-content-between mb-2">
-  <div class="d-flex">
+<!-- #region Chuyển chế độ xem -->
+<div class="d-flex align-items-center gap-2 mb-3">
+  🔁 Chế độ xem:
+  <div class="btn-group" role="group">
     <input
-      [(ngModel)]="searchTerm"
-      (input)="filter()"
-      class="form-control me-2"
-      style="width: 250px"
-      placeholder="Tìm theo tên hoặc username" />
+      type="radio"
+      class="btn-check"
+      name="viewMode"
+      id="view-table"
+      value="table"
+      [(ngModel)]="viewMode"
+      (change)="onViewModeChange('table')"
+      checked />
+    <label class="btn btn-outline-primary" for="view-table">Dạng bảng</label>
 
-    <select [(ngModel)]="statusFilter" (change)="filter()" class="form-select" style="width: 180px">
-      <option value="all">Tất cả</option>
-      <option value="active">Active</option>
-      <option value="inactive">Inactive</option>
-    </select>
+    <input
+      type="radio"
+      class="btn-check"
+      name="viewMode"
+      id="view-tree"
+      value="tree"
+      [(ngModel)]="viewMode"
+      (change)="onViewModeChange('tree')" />
+    <label class="btn btn-outline-primary" for="view-tree">Dạng cây</label>
+  </div>
+</div>
+<!-- #endregion -->
+
+<!-- #region DẠNG BẢNG -->
+<ng-container *ngIf="viewMode === 'table'">
+  <div class="d-flex justify-content-between mb-2">
+    <div class="d-flex">
+      <input
+        [(ngModel)]="searchTerm"
+        (input)="filter()"
+        class="form-control me-2"
+        style="width: 250px"
+        placeholder="Tìm theo tên hoặc username" />
+
+      <select
+        [(ngModel)]="statusFilter"
+        (change)="filter()"
+        class="form-select"
+        style="width: 180px">
+        <option value="all">Tất cả</option>
+        <option value="active">Active</option>
+        <option value="inactive">Inactive</option>
+      </select>
+    </div>
+
+    <button class="btn btn-primary" (click)="openCreateUserModal()">Thêm mới</button>
   </div>
 
-  <button class="btn btn-primary" (click)="openCreateUserModal()">Thêm mới</button>
-</div>
+  <table class="table table-bordered table-hover">
+    <thead>
+      <tr>
+        <th (click)="setSort('fullName')" class="cursor-pointer">
+          Họ tên
+          <i [class]="getSortIcon('fullName')"></i>
+        </th>
+        <th (click)="setSort('userName')" class="cursor-pointer">
+          Username
+          <i [class]="getSortIcon('userName')"></i>
+        </th>
+        <th (click)="setSort('donViName')" class="cursor-pointer">
+          Đơn vị
+          <i [class]="getSortIcon('donViName')"></i>
+        </th>
+        <th (click)="setSort('roles')" class="cursor-pointer">
+          Roles
+          <i [class]="getSortIcon('roles')"></i>
+        </th>
+        <th (click)="setSort('isActive')" class="cursor-pointer">
+          Trạng thái
+          <i [class]="getSortIcon('isActive')"></i>
+        </th>
+        <th>Hành động</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let u of pagedUsers">
+        <td>{{ u.fullName }}</td>
+        <td>{{ u.userName }}</td>
+        <td>{{ u.donViName }}</td>
+        <td>
+          <span *ngFor="let r of u.roles" class="badge bg-info me-1">{{ r }}</span>
+        </td>
+        <td>
+          <span [class.text-success]="u.isActive" [class.text-danger]="!u.isActive">
+            {{ u.isActive ? 'Active' : 'Inactive' }}
+          </span>
+        </td>
+        <td>
+          <button class="btn btn-sm btn-secondary me-1" (click)="openEditUserModal(u)">
+            <i class="fas fa-edit"></i>
+            Sửa
+          </button>
+          <button class="btn btn-sm btn-warning me-1" (click)="toggleActive(u)">
+            {{ u.isActive ? 'Deactive' : 'Active' }}
+          </button>
+          <button *ngIf="!u.isActive" class="btn btn-sm btn-danger" (click)="deleteUser(u)">
+            Xóa
+          </button>
+          <button class="btn btn-sm btn-info me-1" (click)="resetPassword(u)">Reset PW</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 
-<table class="table table-bordered table-hover">
-  <thead>
-    <tr>
-      <th (click)="setSort('fullName')" class="cursor-pointer">
-        Họ tên
-        <i [class]="getSortIcon('fullName')"></i>
-      </th>
-      <th (click)="setSort('userName')" class="cursor-pointer">
-        Username
-        <i [class]="getSortIcon('userName')"></i>
-      </th>
-      <th (click)="setSort('donViName')" class="cursor-pointer">
-        Đơn vị
-        <i [class]="getSortIcon('donViName')"></i>
-      </th>
-      <th (click)="setSort('roles')" class="cursor-pointer">
-        Roles
-        <i [class]="getSortIcon('roles')"></i>
-      </th>
-      <th (click)="setSort('isActive')" class="cursor-pointer">
-        Trạng thái
-        <i [class]="getSortIcon('isActive')"></i>
-      </th>
-      <th>Hành động</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let u of pagedUsers">
-      <td>{{ u.fullName }}</td>
-      <td>{{ u.userName }}</td>
-      <td>{{ u.donViName }}</td>
-      <td>
-        <span *ngFor="let r of u.roles" class="badge bg-info me-1">{{ r }}</span>
-      </td>
-      <td>
-        <span [class.text-success]="u.isActive" [class.text-danger]="!u.isActive">
-          {{ u.isActive ? 'Active' : 'Inactive' }}
-        </span>
-      </td>
-      <td>
-        <button class="btn btn-sm btn-secondary me-1" (click)="openEditUserModal(u)">
-          <i class="fas fa-edit"></i>
-          Sửa
-        </button>
-        <button class="btn btn-sm btn-warning me-1" (click)="toggleActive(u)">
-          {{ u.isActive ? 'Deactive' : 'Active' }}
-        </button>
-        <button *ngIf="!u.isActive" class="btn btn-sm btn-danger" (click)="deleteUser(u)">
-          Xóa
-        </button>
-        <button class="btn btn-sm btn-info me-1" (click)="resetPassword(u)">Reset PW</button>
-      </td>
-    </tr>
-  </tbody>
-</table>
+  <pagination
+    [totalItems]="filteredUsers.length"
+    [(ngModel)]="currentPage"
+    [itemsPerPage]="itemsPerPage"
+    (pageChanged)="setPage($event.page)"
+    previousText="‹"
+    nextText="›"
+    boundaryLinks="true"></pagination>
+</ng-container>
 
-<pagination
-  [totalItems]="filteredUsers.length"
-  [(ngModel)]="currentPage"
-  [itemsPerPage]="itemsPerPage"
-  (pageChanged)="setPage($event.page)"
-  previousText="‹"
-  nextText="›"
-  boundaryLinks="true"></pagination>
+<!-- #region VIEW MODE: TREE -->
+<ng-container *ngIf="viewMode === 'tree'">
+  <div class="row">
+    <!-- Theo đơn vị -->
+    <div class="col-md-6">
+      <div class="card mb-3">
+        <div class="card-header fw-bold">Theo đơn vị</div>
+        <div class="card-body overflow-y-auto" style="max-height: 600px">
+          <ul>
+            <li *ngFor="let unit of unitTree">
+              🏢
+              <strong>{{ unit.unitName }}</strong>
+              <ul>
+                <li *ngFor="let u of unit.users">
+                  👤 {{ u.fullName }}
+                  <small>({{ u.userName }})</small>
+                  <span [class.text-success]="u.isActive" [class.text-danger]="!u.isActive">
+                    • {{ u.isActive ? 'Active' : 'Inactive' }}
+                  </span>
+                  <ul>
+                    <li *ngFor="let r of u.roles">📌 {{ r }}</li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Theo vai trò -->
+    <div class="col-md-6">
+      <div class="card mb-3">
+        <div class="card-header fw-bold">Theo vai trò</div>
+        <div class="card-body overflow-y-auto" style="max-height: 600px">
+          <ul>
+            <li *ngFor="let role of roleTree">
+              📌
+              <strong>{{ role.roleName }}</strong>
+              <ul>
+                <li *ngFor="let u of role.users">
+                  👤 {{ u.fullName }}
+                  <small>({{ u.userName }})</small>
+                  - 🏢 {{ u.donViName }}
+                  <span [class.text-success]="u.isActive" [class.text-danger]="!u.isActive">
+                    • {{ u.isActive ? 'Active' : 'Inactive' }}
+                  </span>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>
+<!-- #endregion -->
