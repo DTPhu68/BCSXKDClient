@@ -15,7 +15,10 @@
         </div>
       </form> -->
       <div class="d-none d-lg-flex flex-grow-1 justify-content-center align-items-center">
-        <span>Báo cáo tình hình SXKD <span class="text-muted small">{{ today | date : 'dd/MM/yyyy' }}</span></span>
+        <span>
+          Báo cáo tình hình SXKD
+          <span class="text-muted small">{{ today | date : 'dd/MM/yyyy' }}</span>
+        </span>
       </div>
 
       <!-- Right Menu -->
@@ -42,6 +45,12 @@
             </li>
             <li><hr class="dropdown-divider" /></li>
             <li>
+              <button class="dropdown-item" (click)="openChangePassword()">
+                <i class="fas fa-key me-2"></i>
+                Đổi mật khẩu
+              </button>
+            </li>
+            <!-- <li>
               <a routerLink="/profile" class="dropdown-item">
                 <i class="fas fa-user me-2"></i>
                 Hồ sơ cá nhân
@@ -52,7 +61,7 @@
                 <i class="fas fa-cog me-2"></i>
                 Cài đặt
               </a>
-            </li>
+            </li> -->
             <li><hr class="dropdown-divider" /></li>
             <li>
               <a href="#" class="dropdown-item" (click)="logout($event)">

@@ -10,8 +10,8 @@ import { BsModalRef } from 'ngx-bootstrap/modal';
   styleUrls: ['./target-addfrom-form.component.scss'],
 })
 export class TargetAddfromFormComponent {
- @Input() parentTarget!: Target;
-  @Input() leafTargets: Target[] = [];   // ✅ nhận sẵn từ list
+  @Input() parentTarget!: Target;
+  @Input() leafTargets: Target[] = []; // ✅ danh sách chỉ tiêu lá
   @Output() saved = new EventEmitter<void>();
 
   selectedIds: Set<number> = new Set();
@@ -26,21 +26,23 @@ export class TargetAddfromFormComponent {
     this.initializeSelection();
   }
 
+    /** Khởi tạo danh sách đã chọn ban đầu */
   initializeSelection() {
     if (this.parentTarget.addFromList) {
-      this.parentTarget.addFromList.forEach((a) => this.selectedIds.add(a.id));
+      this.parentTarget.addFromList.forEach((a) => this.selectedIds.add(a.chiTieuId));
     }
   }
 
-  toggleSelection(id: number) {
-    this.selectedIds.has(id)
-      ? this.selectedIds.delete(id)
-      : this.selectedIds.add(id);
+  /** Bật/tắt chọn một chỉ tiêu */
+  toggleSelection(chiTieuId: number) {
+    this.selectedIds.has(chiTieuId)
+      ? this.selectedIds.delete(chiTieuId)
+      : this.selectedIds.add(chiTieuId);
   }
 
   save() {
     const ids = Array.from(this.selectedIds);
-    this.targetService.updateAddFrom(this.parentTarget.id, ids).subscribe({
+    this.targetService.updateAddFrom(this.parentTarget.chiTieuId, ids).subscribe({
       next: () => {
         this.alert.success('Cập nhật thành công');
         this.saved.emit();
@@ -53,6 +55,4 @@ export class TargetAddfromFormComponent {
   close() {
     this.modalRef.hide();
   }
-
-
 }

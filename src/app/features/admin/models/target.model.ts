@@ -1,5 +1,5 @@
 export interface ChiTieuRef {
-  id: number;
+  chiTieuId: number;
   chiTieuName: string;
 }
 

@@ -1,7 +1,7 @@
 // src/app/core/services/auth.service.ts
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
-import { AuthUser, LoginRequest, LoginResponse } from 'src/app/shared/models';
+import { AuthUser, ChangePasswordRequest, LoginRequest, LoginResponse } from 'src/app/shared/models';
 import { environment } from 'src/environments/environment';
 import { ApiHttpService } from './api-http.service';
 import { Router } from '@angular/router';
@@ -118,5 +118,8 @@ export class AuthService {
     const khoiId = this.getKhoiId();
     if (!khoiId) return undefined;
     return SIDEBAR_MENU.find((x) => x.khoiId === khoiId)?.icon;
+  }
+  changePassword(model: ChangePasswordRequest) {
+    return this.api.post(`${this.baseUrl}/change-password`, model);
   }
 }

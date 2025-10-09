@@ -8,3 +8,8 @@ export interface AuthUser {
   donViName: string;
   roles: string[];
 }
+
+export interface ChangePasswordRequest {
+  currentPassword: string;
+  newPassword: string;
+}

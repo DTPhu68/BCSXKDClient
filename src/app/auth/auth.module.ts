@@ -3,6 +3,8 @@ import { AuthRoutingModule } from './auth-routing.module';
 import { SharedModule } from '../shared/shared.module';
 import { LoginComponent } from './components/login.component';
 import { MockLoginComponent } from './components/mock-login.component';
+import { ChangePwdModalComponent } from './components/change-pwd-modal/change-pwd-modal.component';
+import { DevLoginComponent } from './components/dev-login/dev-login.component';
 
 
 @NgModule({
@@ -12,7 +14,9 @@ import { MockLoginComponent } from './components/mock-login.component';
   ],
   declarations: [
     LoginComponent,
-    MockLoginComponent
+    MockLoginComponent,
+    ChangePwdModalComponent,
+    DevLoginComponent
     // Thêm các component liên quan đến auth ở đây, ví dụ: RegisterComponent
   ]
 })

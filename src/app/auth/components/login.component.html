@@ -17,7 +17,19 @@
               <img src="assets/images/logo.png" alt="Logo" height="60" />
               <h2 class="mt-3">Đăng nhập</h2>
             </div>
+            <!-- mồi nhử, nằm TRƯỚC toàn bộ form thật -->
+            <form style="display: none">
+              <input type="text" name="email" autocomplete="username" />
+              <input type="password" name="password" autocomplete="current-password" />
+            </form>
             <form [formGroup]="loginForm" (ngSubmit)="submit()" autocomplete="off">
+              <!-- mồi nhử để lừa autofill -->
+              <!-- <input type="text" name="fakeuser" autocomplete="username" style="display: none" />
+              <input
+                type="password"
+                name="fakepass"
+                autocomplete="new-password"
+                style="display: none" /> -->
               <!-- username -->
               <div class="mb-3">
                 <label class="form-label">Tên đăng nhập</label>
@@ -25,8 +37,11 @@
                   #usernameInput
                   type="text"
                   autocomplete="off"
+                  autocorrect="off"
+                  autocapitalize="none"
+                  spellcheck="false"
                   class="form-control"
-                  formControlName="userName"                  
+                  formControlName="userName"
                   [ngClass]="{
                     'is-invalid': submitted && f['userName'].errors
                   }" />
@@ -41,8 +56,9 @@
                 <input
                   type="password"
                   class="form-control"
-                  autocomplete="off"
                   formControlName="password"
+                  [attr.autocomplete]="'new-password'"
+                  [attr.name]="'pass'"
                   [ngClass]="{
                     'is-invalid': submitted && f['password'].errors
                   }" />

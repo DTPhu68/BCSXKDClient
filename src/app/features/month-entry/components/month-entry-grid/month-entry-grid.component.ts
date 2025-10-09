@@ -36,6 +36,7 @@ export class MonthEntryGridComponent {
   ngOnInit(): void {
     // Ghi nhận giá trị ban đầu khi load dữ liệu
     this.snapshotOriginalValues();
+    console.log('AddToRelations:', this.addToRelations);
   }
   /** Ghi lại snapshot ban đầu */
   private snapshotOriginalValues() {

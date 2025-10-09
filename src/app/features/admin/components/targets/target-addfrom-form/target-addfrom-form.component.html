@@ -8,10 +8,12 @@
     <input
       class="form-check-input"
       type="checkbox"
-      [checked]="selectedIds.has(t.id)"
-      (change)="toggleSelection(t.id)" />
+      [checked]="selectedIds.has(t.chiTieuId)"
+      (change)="toggleSelection(t.chiTieuId)" />
     <label class="form-check-label">
-      <span [ngStyle]="{ 'padding-left.px': t.level * 15 }">{{ t.id }} - {{ t.chiTieuName }}</span>
+      <span [ngStyle]="{ 'padding-left.px': t.level * 15 }">
+        {{ t.chiTieuId }} -  {{ t.chiTieuName }}
+      </span>
     </label>
   </div>
 </div>

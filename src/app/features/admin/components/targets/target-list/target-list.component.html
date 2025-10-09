@@ -47,7 +47,7 @@
           <span [ngStyle]="{ 'padding-left.px': t.level * 20 }">
             <i *ngIf="!t.leafNode" class="fas fa-folder-open text-primary me-1"></i>
             <i *ngIf="t.leafNode" class="fas fa-leaf text-success me-1"></i>
-            {{ t.chiTieuName }}
+            {{ t.chiTieuName }} ({{t.chiTieuId}})
           </span>
         </td>
 
@@ -62,7 +62,7 @@
         </td>
         <td>
           <ul class="mb-0">
-            <li *ngFor="let c of t.addFromList">{{ c.id }} - {{ c.chiTieuName }}</li>
+            <li *ngFor="let c of t.addFromList">{{ c.chiTieuId }} - {{ c.chiTieuName }}</li>
           </ul>
         </td>
         <td>

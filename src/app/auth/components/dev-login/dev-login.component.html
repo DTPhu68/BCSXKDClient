@@ -1,0 +1,71 @@
+<div class="container-fluid">
+  <div class="row vh-100">
+    <!-- Left: banner -->
+    <div class="col-md-6 d-none d-md-block bg-primary">
+      <div class="d-flex align-items-center justify-content-center h-100">
+        <div class="text-white px-5">
+          <h1 class="display-4 fw-bold">Tình hình sản xuất kinh doanh</h1>
+          <p class="lead">CPĐS - Công nghiệp - Chi nhánh KT + ĐM - CTCP TTTH</p>
+          <p class="lead">Đăng nhập bằng người dùng giả lập</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: dev login -->
+    <div class="col-md-6 bg-light">
+      <div class="d-flex align-items-center justify-content-center h-100">
+        <div class="container mt-4">
+          <form [formGroup]="form" class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label">Vai trò</label>
+              <select class="form-select" formControlName="roleId">
+                <option *ngFor="let r of roles" [value]="r.roleId">{{ r.roleName }}</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Khối</label>
+              <select class="form-select" formControlName="khoiId">
+                <option *ngFor="let k of khois" [value]="k.khoiId">{{ k.khoiName }}</option>
+              </select>
+            </div>
+          </form>
+
+          <div class="border rounded mt-3 p-2 bg-white" style="height: 70vh; overflow-y: auto;">
+            <table class="table table-hover table-sm align-middle mb-0">
+              <thead class="table-light">
+                <tr>
+                  <th>Tên đăng nhập</th>
+                  <th>Họ tên</th>
+                  <th>Vai trò</th>
+                  <th>Khối</th>
+                  <th class="text-center">Thao tác</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let u of filteredUsers">
+                  <td>{{ u.userName }}</td>
+                  <td>{{ u.fullName }}</td>
+                  <td>{{ u.roleName }}</td>
+                  <td>{{ u.khoiName }}</td>
+                  <td class="text-center">
+                    <button
+                      class="btn btn-sm btn-success"
+                      (click)="login(u.userName)"
+                      [disabled]="loading"
+                    >
+                      <i class="fas fa-sign-in-alt me-1"></i> Đăng nhập
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div *ngIf="loading" class="text-center text-muted mt-3 small">
+            Đang đăng nhập...
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

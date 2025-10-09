@@ -64,18 +64,18 @@ export class TargetListComponent {
   }
 
   openAddFromForm(t: Target) {
-  const leafTargets = this.targets.filter(x => x.leafNode && x.id !== t.id);
+    const leafTargets = this.targets.filter((x) => x.leafNode && x.id !== t.id);
 
-  const bsModalRef = this.modalService.show(TargetAddfromFormComponent, {
-    initialState: {
-      parentTarget: t,
-      leafTargets      // ✅ truyền sẵn
-    },
-    class: 'modal-lg',
-  });
+    const bsModalRef = this.modalService.show(TargetAddfromFormComponent, {
+      initialState: {
+        parentTarget: t,
+        leafTargets, // ✅ truyền sẵn
+      },
+      class: 'modal-lg',
+    });
 
-  (bsModalRef.content as TargetAddfromFormComponent).saved.subscribe(() => {
-    this.onKhoiChange(); // reload danh sách sau khi lưu
-  });
-}
+    (bsModalRef.content as TargetAddfromFormComponent).saved.subscribe(() => {
+      this.onKhoiChange(); // reload danh sách sau khi lưu
+    });
+  }
 }
