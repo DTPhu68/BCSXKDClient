@@ -103,7 +103,17 @@ export class AuthService {
   // tìm object trong SIDEBAR_MENU theo khoiId
   getKhoiMenu(): SidebarMenuItem | undefined {
     const khoiId = this.getKhoiId();
-    if (!khoiId) return undefined;
+    if(khoiId===0) {
+      const user = this.getCurrentUser();
+      if(user?.roles.includes('Admin')) {
+        return SIDEBAR_MENU.find((x) => x.key ==='admin');
+      } else if(user?.roles.includes('ToanNganh')) {
+        return SIDEBAR_MENU.find((x) => x.key ==='toannganh');
+      } else {
+        return undefined;
+      }
+    }
+    //if (!khoiId ) return undefined;
     return SIDEBAR_MENU.find((x) => x.khoiId === khoiId);
   }
 

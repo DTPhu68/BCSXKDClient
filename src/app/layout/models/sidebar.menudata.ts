@@ -11,7 +11,7 @@ export const SIDEBAR_MENU: SidebarMenuItem[] = [
         label: 'Trang chính',
         icon: 'fas fa-tachometer-alt',
         routerLink: '/',
-        roles: ['Admin', 'NhapLieu', 'BaoCao'], // các role được phép truy cập
+        roles: ['Admin', 'NhapLieu', 'BaoCao','ToanNganh'], // các role được phép truy cập
         exact: true,
       },
     ],

@@ -13,6 +13,7 @@ const routes: Routes = [
     canActivateChild: [AuthGuard],
     children: [
       { path: '', component: DashboardComponent },
+      { path: ':khoiId', component: DashboardComponent },
       {
         path: 'month-entries/:khoiId',
         loadChildren: () =>
