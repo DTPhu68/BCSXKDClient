@@ -10,4 +10,6 @@ export interface MonthDetail {
   planValue: number;
   actualValue: number;
   yearPlanValue: number; // thêm cột so sánh
+
+   addFrom?: string; // 👈 thêm trường này
 }

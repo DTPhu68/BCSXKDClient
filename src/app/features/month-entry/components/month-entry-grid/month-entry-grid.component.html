@@ -9,6 +9,7 @@
   <thead class="table-light">
     <tr>
       <th style="width: 5%">#</th>
+      <th style="width: 5%">Chỉ tiêu#</th>
       <th style="width: 40%">Chỉ tiêu</th>
       <th style="width: 18%">Kế hoạch tháng</th>
       <th style="width: 18%">Thực hiện tháng</th>
@@ -18,12 +19,13 @@
   <tbody>
     <tr *ngFor="let d of details; index as i" [ngClass]="getRowClass(d.level)">
       <td>{{ i + 1 }}</td>
+      <td>{{ d.chiTieuId }}</td>
       <td>
         <!-- <span *ngIf="d.prefix">{{ d.prefix }}.</span>
         {{ d.chiTieuName }} -->
         <span [style.paddingLeft]="getIndent(d.level)">
           <span *ngIf="d.prefix">{{ d.prefix }}.</span>
-          {{ d.chiTieuName }} ({{ d.chiTieuId }})
+          {{ d.chiTieuName }} {{ d.addFrom }}
         </span>
       </td>
       <!-- Plan -->

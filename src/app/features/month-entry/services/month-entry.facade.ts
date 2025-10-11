@@ -43,7 +43,7 @@ export class MonthEntryFacade {
   // --- Load dữ liệu ---
   loadMonth(thang: number, nam: number) {
     const donViId = this.getDonViId(); // lấy từ auth.service hoặc store
-     if (!donViId) return;
+    if (!donViId) return;
 
     this.loadingSubject.next(true);
     this.service
@@ -51,6 +51,20 @@ export class MonthEntryFacade {
       .pipe(finalize(() => this.loadingSubject.next(false)))
       .subscribe({
         next: (res) => {
+          // --- Tạo map ToId → danh sách FromId[]
+          const addFromMap = res.chiTieuKhoiAddTos.reduce((acc, rel) => {
+            if (!acc[rel.toId]) acc[rel.toId] = [];
+            acc[rel.toId].push(rel.fromId);
+            return acc;
+          }, {} as Record<number, number[]>);
+
+          // --- Gán addFrom cho từng monthItem
+          res.monthItems.forEach((item) => {
+            const fromList = addFromMap[item.chiTieuId];
+            item.addFrom = fromList && fromList.length > 0 ? `(${fromList.join('+')})` : ''; // nếu không có thì để rỗng
+          });
+
+          // ✅ Đẩy vào state
           this.monthSubject.next(res);
           this.dirtySubject.next(false);
         },
@@ -65,32 +79,33 @@ export class MonthEntryFacade {
 
     const finalRequest: SaveMonthRequest = request ?? {
       headerId: current.headerId,
-      monthItems: current.monthItems
+      monthItems: current.monthItems,
     };
 
     this.loadingSubject.next(true);
-    this.service.saveMonth(finalRequest)
+    this.service
+      .saveMonth(finalRequest)
       .pipe(finalize(() => this.loadingSubject.next(false)))
       .subscribe({
         next: () => {
-          this.dirtySubject.next(false);// ✅ reset về false
+          this.dirtySubject.next(false); // ✅ reset về false
 
           // Nếu trạng thái trước đó là New thì chuyển sang Draft
           if (current.status === ReportStatus.New) {
             this.monthSubject.next({ ...current, status: ReportStatus.Draft });
           }
         },
-        error: err => console.error('Save month failed', err)
+        error: (err) => console.error('Save month failed', err),
       });
   }
 
- /** Update khi user nhập dữ liệu */
+  /** Update khi user nhập dữ liệu */
   updateDetails(details: MonthDetail[]) {
     const current = this.monthSubject.value;
     if (current) {
       this.monthSubject.next({
         ...current,
-        monthItems: [...details]
+        monthItems: [...details],
       });
       this.markDirty();
     }
@@ -105,7 +120,7 @@ export class MonthEntryFacade {
           this.monthSubject.next({ ...current, status });
         }
       },
-      error: err => console.error('Change status failed', err)
+      error: (err) => console.error('Change status failed', err),
     });
   }
 
@@ -114,9 +129,8 @@ export class MonthEntryFacade {
     this.dirtySubject.next(true);
   }
 
-
   // --- Lấy donViId từ auth (tùy bạn triển khai) ---
-  private getDonViId(): number {    
+  private getDonViId(): number {
     return this.authService.getDonViId() || 0;
   }
 }

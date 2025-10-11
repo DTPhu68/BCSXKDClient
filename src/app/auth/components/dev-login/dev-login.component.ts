@@ -26,8 +26,8 @@ export class DevLoginComponent {
 
   ngOnInit(): void {
     this.form = this.fb.group({
-      roleId: ['ALL'],
-      khoiId: ['ALL'],
+      roleId: ['NhapLieu'],
+      khoiId: ['4'],
     });
 
     this.loadRoles();
